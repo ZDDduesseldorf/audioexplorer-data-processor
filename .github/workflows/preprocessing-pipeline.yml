@@ -1,0 +1,118 @@
+name: Processing App Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - "feature/**"
+
+  pull_request:
+    branches:
+      - main
+      - "feature/**"
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  app-pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 00 - Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 01 - Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: 02 - Dependencies
+        run: |
+          echo "Schritt Dependencies ist erreicht"
+
+          echo "::group::Python and pip versions"
+          python --version
+          pip --version
+          echo "::endgroup::"
+
+          echo "::group::Install dependencies"
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          echo "::endgroup::"
+
+      - name: 03 - Format
+        run: |
+          echo "Schritt Format ist erreicht"
+
+          echo "::group::Run Ruff formatter check"
+          python -m ruff format --check --diff .
+          echo "::endgroup::"
+
+      - name: 04 - Linting
+        run: |
+          echo "Schritt Linting ist erreicht"
+
+          echo "::group::Run Ruff linting check"
+          python -m ruff check .
+          echo "::endgroup::"
+
+      - name: 05 - Typecheck
+        run: |
+          echo "Schritt Typecheck ist erreicht"
+
+          echo "::group::Run mypy typecheck"
+          python -m mypy app
+          echo "::endgroup::"
+
+      - name: 06 - Tests
+        run: |
+          echo "Schritt Tests ist erreicht"
+
+          echo "::group::Run pytest tests"
+          python -m pytest tests -v
+          echo "::endgroup::"
+
+      - name: 07 - Coverage
+        run: |
+          echo "Schritt Coverage ist erreicht"
+
+          echo "::group::Run pytest with coverage"
+          python -m pytest tests -v --cov=app --cov-report=term-missing --cov-report=xml
+          echo "::endgroup::"
+
+          echo "::group::Check coverage report file"
+          test -f coverage.xml
+          echo "coverage.xml was created successfully"
+          echo "::endgroup::"
+
+      - name: 08 - Security Scan
+        run: |
+          echo "Schritt Security Scan ist erreicht"
+
+          echo "::group::Run Bandit static security scan"
+          python -m bandit -r app -ll -ii
+          echo "::endgroup::"
+
+          echo "::group::Run pip-audit dependency vulnerability scan"
+          pip-audit -r requirements.txt
+          echo "::endgroup::"
+
+      - name: 09 - Docker Build
+        run: |
+          echo "Schritt Docker Build ist erreicht"
+
+          echo "::group::Build Docker image"
+          docker build -t audioexplorer-processing-app .
+          echo "::endgroup::"
+
+      - name: 10 - Docker Smoke Test
+        run: |
+          echo "Schritt Docker Smoke Test ist erreicht"
+
+          echo "::group::Run Docker container"
+          docker run --rm audioexplorer-processing-app
+          echo "::endgroup::"
