@@ -1,7 +1,7 @@
 import pytest
 import json
-import scripts.pipeline as pipe
-from app.services.model import DataOverviewJSON
+import app.services.pipeline as pipe
+from app.schemas.model import DataOverviewJSON
 
 
 @pytest.fixture

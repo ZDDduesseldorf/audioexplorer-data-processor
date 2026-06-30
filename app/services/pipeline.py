@@ -1,11 +1,13 @@
-from app.services.model import DataOverviewJSON
-from app.services.json_utils import write_json_file
-from app.services.metadata_utils import load_all_metadata
-from scripts.run_audio_preprocessing import run_audio_preprocessing
-from app.services.embedding_service import compute_embedding_from_list_ProcessedAudios
-from app.services.umap_service import calculate_umap_2d_from_list_embeddings
-from app.services.nearest_neighbor_service import compute_nearest_neighbors
-from app.services.anomaly_detection.anomaly_service import AnomalyService
+from app.schemas.model import DataOverviewJSON
+from app.processing.utils.json_utils import write_json_file
+from app.processing.utils.metadata_utils import load_all_metadata
+from app.services.run_audio_preprocessing import run_audio_preprocessing
+from app.processing.embeddings.embedding_service import (
+    compute_embedding_from_list_ProcessedAudios,
+)
+from app.processing.umap_service import calculate_umap_2d_from_list_embeddings
+from app.processing.nearest_neighbor_service import compute_nearest_neighbors
+from app.processing.anomaly_detection.anomaly_service import AnomalyService
 from pathlib import Path
 
 
