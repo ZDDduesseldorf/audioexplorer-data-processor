@@ -4,7 +4,7 @@ import numpy as np
 import torch
 
 from app.processing.embeddings.model_manager import ModelManager
-from app.services.preprocessing.config import AudioPreprocessingConfig
+from app.processing.audio.audio_config import AudioPreprocessingConfig
 from app.schemas.model import PreprocessedAudio, EmbeddingData
 
 

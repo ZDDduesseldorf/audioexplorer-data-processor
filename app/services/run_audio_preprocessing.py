@@ -1,13 +1,13 @@
-from app.services.preprocessing.config import AudioPreprocessingConfig
-from app.services.preprocessing.filter import (
+from app.processing.audio.audio_config import AudioPreprocessingConfig
+from app.processing.audio.filter import (
     AudioLengthFilter,
     AudioNoiseReducer,
     AudioSilenceFilter,
 )
-from app.services.preprocessing.loader import LocalAudioLoader
-from app.services.preprocessing.resampler import AudioResampler
-from app.services.preprocessing.saver import AudioSaver
-from app.services.model import PreprocessedAudio
+from app.processing.audio.loader import LocalAudioLoader
+from app.processing.audio.resampler import AudioResampler
+from app.processing.audio.saver import AudioSaver
+from app.schemas.model import PreprocessedAudio
 
 
 def run_audio_preprocessing(path_audio, target_path) -> None:
