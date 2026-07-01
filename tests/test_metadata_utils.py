@@ -6,7 +6,7 @@ import pytest
 
 @pytest.fixture
 def test_metadata():
-    metadata_path = get_data_file_path("metadata.json")
+    metadata_path = get_data_file_path("raw_audios/metadata.json")
     return metadata_path
 
 
