@@ -108,8 +108,16 @@ jobs:
           echo "::group::Build Docker image"
           docker build -t audioexplorer-processing-app .
           echo "::endgroup::"
+          
+      - name: 10 - Upload Docker Image Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: audioexplorer-api-image-${{ github.sha }}
+          path: audioexplorer-api-image.tar.gz
+          if-no-files-found: error
+          retention-days: 1
 
-      - name: 10 - Docker Smoke Test
+      - name: 11 - Docker Smoke Test
         run: |
           echo "Schritt Docker Smoke Test ist erreicht"
 
