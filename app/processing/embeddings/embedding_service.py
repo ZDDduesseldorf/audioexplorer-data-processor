@@ -35,7 +35,7 @@ def compute_embeddings_batch(
 
 def compute_embedding_from_list_ProcessedAudios(
     preprocessedAudio: list[PreprocessedAudio],
-):
+) -> list[EmbeddingData]:
 
     manager = ModelManager()
     manager.load()

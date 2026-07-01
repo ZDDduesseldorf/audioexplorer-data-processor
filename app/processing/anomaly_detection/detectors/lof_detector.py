@@ -6,7 +6,7 @@
 # Import the Local Outlier Factor algorithm from scikit-learn
 # for anomaly detection.
 import numpy as np
-from sklearn.neighbors import LocalOutlierFactor  # type: ignore
+from sklearn.neighbors import LocalOutlierFactor
 
 # Import the abstract base detector class that defines the detector interface.
 from app.processing.anomaly_detection.detectors.base_detector import (

@@ -1,7 +1,7 @@
 # Computes the k nearest neighbors per embedding using cosine distance.
 
 import numpy as np
-from sklearn.neighbors import NearestNeighbors  # type: ignore[import-untyped]
+from sklearn.neighbors import NearestNeighbors
 
 from app.schemas.model import EmbeddingData
 

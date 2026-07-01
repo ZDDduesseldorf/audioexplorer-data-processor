@@ -8,9 +8,12 @@ from app.processing.audio.loader import LocalAudioLoader
 from app.processing.audio.resampler import AudioResampler
 from app.processing.audio.saver import AudioSaver
 from app.schemas.model import PreprocessedAudio
+from pathlib import Path
 
 
-def run_audio_preprocessing(path_audio, target_path) -> None:
+def run_audio_preprocessing(
+    path_audio: Path, target_path: Path
+) -> list[PreprocessedAudio] | None:
     config = AudioPreprocessingConfig()
 
     loader = LocalAudioLoader()
@@ -24,7 +27,7 @@ def run_audio_preprocessing(path_audio, target_path) -> None:
 
     if not audio_files:
         print(f"No audio files found in: {path_audio}")
-        return
+        return None
 
     list_preprocessed_audio = []
 
@@ -87,7 +90,3 @@ def run_audio_preprocessing(path_audio, target_path) -> None:
         print(f"Saved: {saved_path}")
 
     return list_preprocessed_audio
-
-
-if __name__ == "__main__":
-    run_audio_preprocessing()

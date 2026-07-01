@@ -10,7 +10,7 @@ import numpy as np
 
 # Import the Isolation Forest algorithm from
 # scikit-learn for anomaly detection.
-from sklearn.ensemble import IsolationForest  # type: ignore
+from sklearn.ensemble import IsolationForest
 
 # Import the abstract base detector class that
 # defines the common detector interface.

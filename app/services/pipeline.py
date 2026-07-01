@@ -21,6 +21,8 @@ def calculate_umap_from_audio(
     # laod and preprocess audio files
     audios_preprocessed = run_audio_preprocessing(path_audio_folder, target_path_audios)
 
+    if audios_preprocessed is None:
+        raise ValueError("No audio files found")
     # calculate Embeddings
     embeddings = compute_embedding_from_list_ProcessedAudios(audios_preprocessed)
 
