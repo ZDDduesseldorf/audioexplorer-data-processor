@@ -109,7 +109,11 @@ jobs:
           docker build -t audioexplorer-processing-app .
           echo "::endgroup::"
 
-      - name: 10 - Upload Docker Image Artifact
+      - name: 10 - Save Docker Image to Tarball
+        run: |
+          docker save docker.io/library/audioexplorer-processing-app:latest | gzip > audioexplorer-processing-app.tar.gz
+
+      - name: 11 - Upload Docker Image Artifact
         uses: actions/upload-artifact@v4
         with:
           name: audioexplorer-processing-app-${{ github.sha }}
@@ -117,7 +121,8 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
-      - name: 11 - Docker Smoke Test
+
+      - name: 12 - Docker Smoke Test
         run: |
           echo "Schritt Docker Smoke Test ist erreicht"
 
