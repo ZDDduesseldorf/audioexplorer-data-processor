@@ -15,3 +15,4 @@ soundfile
 umap-learn
 pandas
 pandas-stubs
+pydantic

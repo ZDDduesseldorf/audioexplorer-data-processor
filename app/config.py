@@ -11,3 +11,32 @@ def get_data_dir() -> Path:
 
 def get_data_file_path(filename: str) -> Path:
     return get_data_dir() / filename
+
+
+RAW_AUDIO_FOLDER = Path(
+    os.environ.get(
+        "AUDIOEXPLORER_RAW_AUDIO_FOLDER",
+        get_data_dir() / "raw_audios",
+    )
+)
+
+METADATA_FILEPATH = Path(
+    os.environ.get(
+        "AUDIOEXPLORER_METADATA_FILEPATH",
+        get_data_dir() / "raw_audios" / "metadata.json",
+    )
+)
+
+TARGET_AUDIO_FOLDER = Path(
+    os.environ.get(
+        "AUDIOEXPLORER_TARGET_AUDIO_FOLDER",
+        get_data_dir() / "processed_audios",
+    )
+)
+
+TARGET_JSON_FILEPATH = Path(
+    os.environ.get(
+        "AUDIOEXPLORER_TARGET_JSON_FILEPATH",
+        get_data_dir() / "processed_audios" / "data_overview.json",
+    )
+)
