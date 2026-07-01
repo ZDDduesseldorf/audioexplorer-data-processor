@@ -108,12 +108,12 @@ jobs:
           echo "::group::Build Docker image"
           docker build -t audioexplorer-processing-app .
           echo "::endgroup::"
-          
+
       - name: 10 - Upload Docker Image Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: audioexplorer-api-image-${{ github.sha }}
-          path: audioexplorer-api-image.tar.gz
+          name: audioexplorer-processing-app-${{ github.sha }}
+          path: audioexplorer-processing-app.tar.gz
           if-no-files-found: error
           retention-days: 1
 
