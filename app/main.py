@@ -1,6 +1,3 @@
-from pathlib import Path
-import os
-
 from app.services.pipeline import calculate_umap_from_audio
 from app.config import (
     RAW_AUDIO_FOLDER,
