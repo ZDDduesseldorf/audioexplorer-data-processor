@@ -22,7 +22,7 @@ def test_accessing_processor_without_load_raises_error() -> None:
 
 
 @patch("app.processing.embeddings.model_manager.ClapProcessor")
-@patch("app.processing.model_manager.ClapModel")
+@patch("app.processing.embeddings.model_manager.ClapModel")
 def test_load_downloads_model_and_marks_as_loaded(
     mock_model_cls: MagicMock, mock_processor_cls: MagicMock
 ) -> None:
