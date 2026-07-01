@@ -24,7 +24,7 @@ def _mock_manager(embedding_shape: tuple[int, int] = (1, 512)) -> MagicMock:
 
 
 @patch(
-    "app.services.embedding_service.torch.no_grad",
+    "app.processing.embeddings.embedding_service.torch.no_grad",
     return_value=contextlib.nullcontext(),
 )
 def test_single_embedding_has_correct_shape(mock_no_grad: MagicMock) -> None:
@@ -37,7 +37,7 @@ def test_single_embedding_has_correct_shape(mock_no_grad: MagicMock) -> None:
 
 
 @patch(
-    "app.services.embedding_service.torch.no_grad",
+    "app.processing.embeddings.embedding_service.torch.no_grad",
     return_value=contextlib.nullcontext(),
 )
 def test_model_is_called_during_embedding(mock_no_grad: MagicMock) -> None:
@@ -50,7 +50,7 @@ def test_model_is_called_during_embedding(mock_no_grad: MagicMock) -> None:
 
 
 @patch(
-    "app.services.embedding_service.torch.no_grad",
+    "app.processing.embeddings.embedding_service.torch.no_grad",
     return_value=contextlib.nullcontext(),
 )
 def test_batch_output_has_one_row_per_waveform(mock_no_grad: MagicMock) -> None:
