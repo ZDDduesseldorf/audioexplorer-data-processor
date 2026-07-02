@@ -1,24 +1,10 @@
 # Running the Application with Docker
 
-## Build the Docker Image
-
-Build the image using:
-
 ```bash
-docker build --build-arg AUDIOEXPLORER_DATA_DIR=data -t audioexplorer-data-processor:local .
+docker compose up
 ```
 
 The `AUDIOEXPLORER_DATA_DIR` build argument specifies the directory containing the input data that should be copied into the Docker image.
-
-## Run the Container
-
-To run the container with a mounted data directory:
-
-```bash
-docker run  -v "$(pwd)/data:/data" -e AUDIOEXPLORER_DATA_DIR=/data  audioexplorer-data-processor:local
-```
-
-The volume mount ensures that both the input data and all generated output files are stored on the host machine.
 
 ## Default Directory Structure
 
