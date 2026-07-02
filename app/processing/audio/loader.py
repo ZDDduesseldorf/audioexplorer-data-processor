@@ -12,7 +12,7 @@ class LocalAudioLoader:
             mono=True,
         )
 
-        return audio, int(sample_rate)
+        return audio.astype(np.float32), int(sample_rate)
 
 
 # TODO: DatabaseAudioLoader
