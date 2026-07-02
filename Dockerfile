@@ -14,5 +14,6 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     pip install -r requirements.txt
 
 COPY app ./app
+COPY testdata ./testdata
 
 CMD ["python", "-m", "app.main"]
