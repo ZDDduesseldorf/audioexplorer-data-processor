@@ -1,0 +1,12 @@
+services:
+  data-processor:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - AUDIOEXPLORER_DATA_DIR=data
+    image: audioexplorer-data-processor:local
+    volumes:
+      - ./data:/data
+    environment:
+      - AUDIOEXPLORER_DATA_DIR=/data
