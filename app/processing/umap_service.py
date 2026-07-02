@@ -62,6 +62,7 @@ def _apply_umap(reduced: np.ndarray, n_components: int) -> np.ndarray:
         n_components=n_components,
         n_neighbors=n_neighbors,
         min_dist=_UMAP_MIN_DIST,
+        init="random",
         random_state=1,
     ).fit_transform(reduced)
     return result

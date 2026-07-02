@@ -17,9 +17,6 @@ def compute_nearest_neighbors(
     ordered by ascending distance (0.0 = identical, 1.0 = maximally different).
     """
 
-    if len(embeddings) < k:
-        k = len(embeddings)
-
     uuids = [entry.uuid for entry in embeddings]
     embedding_matrix = np.vstack([entry.embedding for entry in embeddings])
 
