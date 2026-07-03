@@ -20,6 +20,7 @@ def load_all_metadata(path_metadata: Path) -> dict:
             "label": row.label,
             "category": row.category,
             "filename": row.filename,
+            "source": row.source,
         }
 
     return metadata
