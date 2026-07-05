@@ -21,7 +21,6 @@ RAW_AUDIO_FOLDER = Path(
 )
 
 METADATA_FILENAME = "metadata.json"
-METADATA_FILEPATH = METADATA_FILENAME
 
 TARGET_AUDIO_FOLDER = Path(
     os.environ.get(

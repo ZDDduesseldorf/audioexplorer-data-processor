@@ -11,11 +11,13 @@ def sample_metadata_results():
             "label": "laughing",
             "category": "laugh",
             "filename": "1.wav",
+            "source": "nvv_clips",
         },
         "2": {
             "label": "crying",
             "category": "cry",
             "filename": "2.wav",
+            "source": "nvv_clips",
         },
     }
 
@@ -90,6 +92,7 @@ def test_create_DataOverview(
     assert response[0].umap_x == 0.1
     assert response[0].anomalie_LOF == 1.2
     assert response[0].nearest_neighbors == {"2": 0.083}
+    assert response[0].source == "nvv_clips"
 
 
 def test_create_data_overview_skips_missing_nn(
@@ -126,6 +129,7 @@ def test_save_results_as_json(tmp_path):
             label="laughing",
             category="laugh",
             filename="uuid_1.wav",
+            source="nvv_clips",
             anomalie_isolation_forest=0.0,
             anomalie_LOF=0.0,
             anomalie_isolation_forest_label="unknown",
@@ -145,3 +149,4 @@ def test_save_results_as_json(tmp_path):
     assert saved["uuid_1"]["label"] == "laughing"
     assert saved["uuid_1"]["nearest_neighbors"] == {"uuid_2": 0.083}
     assert "uuid" not in saved["uuid_1"]
+    assert saved["uuid_1"]["source"] == "nvv_clips"
