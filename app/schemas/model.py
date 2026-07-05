@@ -31,3 +31,9 @@ class DataOverviewJSON(BaseModel):
     anomalie_isolation_forest_label: str
     anomalie_LOF_label: str
     nearest_neighbors: dict[str, float]
+
+
+class CategoryListItem(BaseModel):
+    id: int
+    key: str
+    name: str

@@ -6,6 +6,10 @@ from app.config import (
     TARGET_JSON_FILENAME,
 )
 
+from app.processing.utils.json_utils import load_all_categories
+from app.services.npz_service import create_npz_file_from_category_list_json
+from app.services.api_import_service import import_categories
+
 
 def run() -> str:
     return "Audioexplorer processing app is ready"
@@ -14,6 +18,13 @@ def run() -> str:
 def main() -> None:
 
     print("Starting UMAP calculation from audio...")
+
+    list_categorys = load_all_categories()
+    target = TARGET_AUDIO_FOLDER / "category.npz"
+    create_npz_file_from_category_list_json(list_categorys, target)
+    import_categories(target)
+
+    import_categories
 
     calculate_umap_from_audio(
         path_audio_folder=RAW_AUDIO_FOLDER,
