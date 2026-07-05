@@ -4,5 +4,15 @@ pytest
 pytest-cov
 bandit
 pip-audit
-sqlalchemy
-psycopg[binary]
+
+numpy
+scipy
+scikit-learn
+torch
+transformers
+librosa
+soundfile
+umap-learn
+pandas
+pandas-stubs
+pydantic

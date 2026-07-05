@@ -1,0 +1,40 @@
+{
+  "sample-001": {
+    "umap_x": 5.12,
+    "umap_y": 6.3,
+    "umap_z": 0,
+    "label": "laughing",
+    "category": "laugh",
+    "filename": "a_RA1_01_01__xh6fC2ZfwU_moan.wav",
+    "anomalie_isolation_forest": 58.6,
+    "anomalie_LOF": 59.7,
+    "anomalie_isolation_forest_label": "unknown",
+    "anomalie_LOF_label": "unknown"
+  },
+
+  "2": {
+    "umap_x": 2.12,
+    "umap_y": 9.3,
+    "umap_z": 0,
+    "label": "laughing",
+    "category": "laugh",
+    "filename": "a_RA2_056_XSoJqdPi4Iw_groaning.wav",
+    "anomalie_isolation_forest": 58.6,
+    "anomalie_LOF": 59.7,
+    "anomalie_isolation_forest_label": "unknown",
+    "anomalie_LOF_label": "unknown"
+  },
+
+  "3": {
+    "umap_x": 7.12,
+    "umap_y": 3.3,
+    "umap_z": 0,
+    "label": "laughing",
+    "category": "laugh",
+    "filename": "a_RA2_093_FL1LUiqNITo_oohsound.wav",
+    "anomalie_isolation_forest": 58.6,
+    "anomalie_LOF": 59.7,
+    "anomalie_isolation_forest_label": "unknown",
+    "anomalie_LOF_label": "unknown"
+  }
+}

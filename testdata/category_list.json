@@ -1,0 +1,16 @@
+{
+  "1": {
+    "key": "laugh",
+    "displayName": "lachen"
+  },
+
+  "2": {
+    "key": "cry",
+    "displayName": "weinen"
+  },
+
+  "3": {
+    "key": "scream",
+    "displayName": "schreien"
+  }
+}
