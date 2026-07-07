@@ -31,7 +31,7 @@ def main() -> None:
         path_audio_folder=RAW_AUDIO_FOLDER,
         filename_metadata=METADATA_FILENAME,
         target_path_audios=TARGET_AUDIO_FOLDER,
-        target_filename_json=TARGET_FILENAME_DATAOVERVIEW,
+        target_filename_dataoverview=TARGET_FILENAME_DATAOVERVIEW,
     )
 
     import_data_overview(TARGET_AUDIO_FOLDER / "dataoverview.npz")
