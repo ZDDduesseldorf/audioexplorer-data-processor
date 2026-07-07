@@ -5,7 +5,7 @@ from app.config import (
     RAW_AUDIO_FOLDER,
     METADATA_FILENAME,
     TARGET_AUDIO_FOLDER,
-    TARGET_JSON_FILENAME,
+    TARGET_FILENAME_DATAOVERVIEW,
 )
 
 
@@ -14,7 +14,7 @@ def test_run_pipeline():
         path_audio_folder=RAW_AUDIO_FOLDER,
         filename_metadata=METADATA_FILENAME,
         target_path_audios=TARGET_AUDIO_FOLDER,
-        target_filename_json=TARGET_JSON_FILENAME,
+        target_filename_dataoverview=TARGET_FILENAME_DATAOVERVIEW,
     )
 
     npz_path = TARGET_AUDIO_FOLDER / "dataoverview.npz"
