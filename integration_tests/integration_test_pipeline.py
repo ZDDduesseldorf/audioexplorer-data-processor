@@ -1,5 +1,4 @@
 from app.services.pipeline import calculate_umap_from_audio
-import pytest
 
 
 from app.config import (
