@@ -13,38 +13,75 @@ from pathlib import Path
 
 def calculate_umap_from_audio(
     path_audio_folder: Path,
-    path_metadata: Path,
+    filename_metadata: str,
     target_path_audios: Path,
-    target_path_json: Path,
+    target_filename_json: str,
 ):
     """Calculate UMAP embeddings and anomaly scores from audio files and save the results as a JSON file."""
-    # laod and preprocess audio files
-    audios_preprocessed = run_audio_preprocessing(path_audio_folder, target_path_audios)
 
-    if audios_preprocessed is None:
+    all_audios = []
+    all_metadata = {}
+
+    subfolders = [p for p in path_audio_folder.iterdir() if p.is_dir()]
+
+    if not subfolders:
+        audios = run_audio_preprocessing(path_audio_folder, target_path_audios)
+        if audios:
+            all_audios.extend(audios)
+
+        path_metadata = path_audio_folder / filename_metadata
+
+        all_metadata.update(load_all_metadata(path_metadata))
+    else:
+        for folder in path_audio_folder.iterdir():
+            if not folder.is_dir():
+                continue
+
+            metadata_path = folder / filename_metadata
+            if not metadata_path.exists():
+                print(f"Skipping {folder}: metadata.json missing")
+                continue
+
+            audios = run_audio_preprocessing(folder, target_path_audios)
+
+            if audios is None:
+                print(f"No audio files found in {folder}")
+                continue
+
+            all_audios.extend(audios)
+
+            metadata = load_all_metadata(metadata_path)
+            all_metadata.update(metadata)
+
+    # laod and preprocess audio files
+
+    if not all_audios:
         raise ValueError("No audio files found")
     # calculate Embeddings
-    embeddings = compute_embedding_from_list_ProcessedAudios(audios_preprocessed)
 
+    print("Calculate Embeddnings")
+    embeddings = compute_embedding_from_list_ProcessedAudios(all_audios)
+
+    print("Calculate nearest Neighbours")
     # calculate Nearest Neighbours
     nn_results = compute_nearest_neighbors(embeddings)
 
+    print("Calculate Anomalies")
     # calculate Anomalies
     anomaly_service = AnomalyService()
     anomaly_results = anomaly_service.calculate_anomalies(embeddings)
 
     # calculate UMAP from embeddings
 
+    print("Calculate UMAP")
     umap_results = calculate_umap_2d_from_list_embeddings(embeddings)
-
-    # load metadata and create DataOverview objects
-    metadata_results = load_all_metadata(path_metadata)
 
     # create DataOverview objects and save results as JSON
     list_DataOverview = create_DataOverview(
-        metadata_results, umap_results, anomaly_results, nn_results
+        all_metadata, umap_results, anomaly_results, nn_results
     )
 
+    target_path_json = target_path_audios / target_filename_json
     save_results_as_json(list_DataOverview, target_path_json)
 
 
@@ -62,6 +99,7 @@ def save_results_as_json(
             "label": item.label,
             "category": item.category,
             "filename": item.filename,
+            "source": item.source,
             "anomalie_isolation_forest": item.anomalie_isolation_forest,
             "anomalie_LOF": item.anomalie_LOF,
             "anomalie_isolation_forest_label": item.anomalie_isolation_forest_label,
@@ -111,6 +149,7 @@ def create_DataOverview(
             label=metadata["label"],
             category=metadata["category"],
             filename=metadata["filename"],
+            source=metadata["source"],
             anomalie_isolation_forest=anomaly["scores"]["isolation_forest"],
             anomalie_LOF=anomaly["scores"]["lof"],
             anomalie_isolation_forest_label=anomaly["labels"]["isolation_forest"],

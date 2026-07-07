@@ -41,15 +41,18 @@ def test_load_all_metadata(test_metadata):
             "label": "laughing",
             "category": "to be defined",
             "filename": "a_RA1_01_01__xh6fC2ZfwU_moan.wav",
+            "source": "nvv_clips",
         },
         "2": {
             "label": "laughing",
             "category": "to be defined",
             "filename": "a_RA2_056_XSoJqdPi4Iw_groaning.wav",
+            "source": "nvv_clips",
         },
         "3": {
             "label": "laughing",
             "category": "to be defined",
             "filename": "a_RA2_093_FL1LUiqNITo_oohsound.wav",
+            "source": "nvv_clips",
         },
     }

@@ -20,12 +20,7 @@ RAW_AUDIO_FOLDER = Path(
     )
 )
 
-METADATA_FILEPATH = Path(
-    os.environ.get(
-        "AUDIOEXPLORER_METADATA_FILEPATH",
-        get_data_dir() / "raw_audios" / "metadata.json",
-    )
-)
+METADATA_FILENAME = "metadata.json"
 
 TARGET_AUDIO_FOLDER = Path(
     os.environ.get(
@@ -34,9 +29,4 @@ TARGET_AUDIO_FOLDER = Path(
     )
 )
 
-TARGET_JSON_FILEPATH = Path(
-    os.environ.get(
-        "AUDIOEXPLORER_TARGET_JSON_FILEPATH",
-        get_data_dir() / "processed_audios" / "data_overview.json",
-    )
-)
+TARGET_JSON_FILENAME = "data_overview.json"
