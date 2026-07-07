@@ -8,7 +8,7 @@ from app.config import (
 
 from app.processing.utils.json_utils import load_all_categories
 from app.services.npz_service import create_npz_file_from_category_list_json
-from app.services.api_import_service import import_categories
+from app.services.api_import_service import import_categories, import_data_overview
 
 
 def run() -> str:
@@ -32,6 +32,8 @@ def main() -> None:
         target_path_audios=TARGET_AUDIO_FOLDER,
         target_filename_json=TARGET_JSON_FILENAME,
     )
+
+    import_data_overview(TARGET_AUDIO_FOLDER / "dataoverview.npz")
 
     print("UMAP calculation finished.")
     print(f"Processed audio files saved to: {TARGET_AUDIO_FOLDER}")

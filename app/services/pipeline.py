@@ -9,7 +9,6 @@ from app.processing.umap_service import calculate_umap_2d_from_list_embeddings
 from app.processing.nearest_neighbor_service import compute_nearest_neighbors
 from app.processing.anomaly_detection.anomaly_service import AnomalyService
 from app.services.npz_service import create_npz_file_from_list_DataOverview
-from app.services.api_import_service import import_data_overview
 from pathlib import Path
 
 
@@ -83,14 +82,9 @@ def calculate_umap_from_audio(
         all_metadata, umap_results, anomaly_results, nn_results
     )
 
-    target_path_json = target_path_audios / target_filename_json
-    save_results_as_json(list_DataOverview, target_path_json)
-
     target_npz = target_path_audios / "dataoverview.npz"
 
     create_npz_file_from_list_DataOverview(list_DataOverview, target_npz)
-
-    import_data_overview(target_npz)
 
 
 def save_results_as_json(
