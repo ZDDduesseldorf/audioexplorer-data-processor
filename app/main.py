@@ -3,7 +3,8 @@ from app.config import (
     RAW_AUDIO_FOLDER,
     METADATA_FILENAME,
     TARGET_AUDIO_FOLDER,
-    TARGET_JSON_FILENAME,
+    TARGET_FILENAME_CATEGORYS,
+    TARGET_FILENAME_DATAOVERVIEW,
 )
 
 from app.processing.utils.json_utils import load_all_categories
@@ -16,28 +17,33 @@ def run() -> str:
 
 
 def main() -> None:
-
-    print("Starting UMAP calculation from audio...")
-
+    print("Create Category.npz")
     list_categorys = load_all_categories()
-    target = TARGET_AUDIO_FOLDER / "category.npz"
-    create_npz_file_from_category_list_json(list_categorys, target)
-    import_categories(target)
+    target_path_category = TARGET_AUDIO_FOLDER / TARGET_FILENAME_CATEGORYS
+    create_npz_file_from_category_list_json(list_categorys, target_path_category)
+    import_categories(target_path_category)
 
     import_categories
+
+    print("Starting UMAP calculation from audio...")
 
     calculate_umap_from_audio(
         path_audio_folder=RAW_AUDIO_FOLDER,
         filename_metadata=METADATA_FILENAME,
         target_path_audios=TARGET_AUDIO_FOLDER,
-        target_filename_json=TARGET_JSON_FILENAME,
+        target_filename_json=TARGET_FILENAME_DATAOVERVIEW,
     )
 
     import_data_overview(TARGET_AUDIO_FOLDER / "dataoverview.npz")
 
     print("UMAP calculation finished.")
     print(f"Processed audio files saved to: {TARGET_AUDIO_FOLDER}")
-    print(f"Results saved to JSON file: {TARGET_AUDIO_FOLDER} / {TARGET_JSON_FILENAME}")
+    print(
+        f"Dataoverview saved to NPZ file: {TARGET_AUDIO_FOLDER} / {TARGET_FILENAME_DATAOVERVIEW}"
+    )
+    print(
+        f"Categorys saved to NPZ file: {TARGET_AUDIO_FOLDER} / {TARGET_FILENAME_CATEGORYS}"
+    )
 
     print(run())
 

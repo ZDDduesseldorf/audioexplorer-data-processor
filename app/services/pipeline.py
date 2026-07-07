@@ -16,7 +16,7 @@ def calculate_umap_from_audio(
     path_audio_folder: Path,
     filename_metadata: str,
     target_path_audios: Path,
-    target_filename_json: str,
+    target_filename_dataoverview: str,
 ):
     """Calculate UMAP embeddings and anomaly scores from audio files and save the results as a JSON file."""
 
@@ -82,9 +82,8 @@ def calculate_umap_from_audio(
         all_metadata, umap_results, anomaly_results, nn_results
     )
 
-    target_npz = target_path_audios / "dataoverview.npz"
-
-    create_npz_file_from_list_DataOverview(list_DataOverview, target_npz)
+    target_path_dataoverview = target_path_audios / target_filename_dataoverview
+    create_npz_file_from_list_DataOverview(list_DataOverview, target_path_dataoverview)
 
 
 def save_results_as_json(
