@@ -1,10 +1,10 @@
 # Running the Application with Docker
 
-```bash
-docker compose up
-```
+This application processes the raw audio data and its metadata to generate a data overview. The categories are also read from a JSON file. The data overview and the categories are saved as NPZ files. They are also imported directly into the database of the associated Git repository (https://github.com/ZDDduesseldorf/audioexplorer-backend/tree/main). For this to work, the repository’s Docker container must also be running.
 
-The `AUDIOEXPLORER_DATA_DIR` build argument specifies the directory containing the input data that should be copied into the Docker image.
+```bash
+docker compose up --build
+```
 
 ## Default Directory Structure
 
@@ -18,7 +18,8 @@ data/
 │   ├── uuid1.wav
 │   ├── uuid2.wav
 │   └── uuid3.wav
-└── processed_audios/
+├── processed_audios/
+└── category_list.json
 ```
 
 or it also takes subfolders
@@ -37,7 +38,9 @@ data/
 │       ├── uuid4.wav
 │       ├── uuid5.wav
 │       └── uuid6.wav
-└── processed_audios/
+├── processed_audios/
+└── category_list.json
+
 ```
 
 ## Output Files
@@ -49,7 +52,8 @@ processed_audios/
 ├── uuid1.wav
 ├── uuid2.wav
 ├── uuid3.wav
-└── data_overview.json
+|── category.npz
+└── data_overview.npz
 ```
 
 The `processed_audios` directory contains the preprocessed audio files, while `data_overview.json` contains the calculated UMAP coordinates, anomaly scores, nearest neighbors, and metadata for all processed audio files.
@@ -58,12 +62,13 @@ The `processed_audios` directory contains the preprocessed audio files, while `d
 
 Default paths are defined in `config.py` and can be overridden using environment variables.
 
-| Environment Variable     | Description                                                      | Default            |
-| ------------------------ | ---------------------------------------------------------------- | ------------------ |
-| `RAW_AUDIO_FOLDER`       | Path to the directory containing the raw audio files.            | raw_audios         |
-| `METADATA_FILENAME`      | Name of the json-file that includes the metadata                 | metadata.json      |
-| `TARGET_AUDIO_FOLDER`    | Target directory where the preprocessed audio files are written. | processed_audios   |
-| `TARGET_JSON_FILENAME`   | Target filename of the generated data                            | data_overview.json |
-| `AUDIOEXPLORER_DATA_DIR` | Base data directory used to derive the default paths above.      | testdata           |
+| Environment Variable           | Description                                                      | Default           |
+| ------------------------------ | ---------------------------------------------------------------- | ----------------- |
+| `RAW_AUDIO_FOLDER`             | Path to the directory containing the raw audio files.            | raw_audios        |
+| `METADATA_FILENAME`            | Name of the json-file that includes the metadata                 | metadata.json     |
+| `TARGET_AUDIO_FOLDER`          | Target directory where the preprocessed audio files are written. | processed_audios  |
+| `TARGET_FILENAME_DATAOVERVIEW` | Target filename of the generated data overview npz-file          | data_overview.npz |
+| `TARGET_FILENAME_CATEGORYS`    | Target filename of the generated category npz-file               | category.npz      |
+| `AUDIOEXPLORER_DATA_DIR`       | Base data directory used to derive the default paths above.      | testdata          |
 
 If only `AUDIOEXPLORER_DATA_DIR` is specified, all other paths are automatically derived from it using the default directory layout.
