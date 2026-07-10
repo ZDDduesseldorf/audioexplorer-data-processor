@@ -17,5 +17,5 @@ def test_run_pipeline():
         target_filename_dataoverview=TARGET_FILENAME_DATAOVERVIEW,
     )
 
-    npz_path = TARGET_AUDIO_FOLDER / "dataoverview.npz"
+    npz_path = TARGET_AUDIO_FOLDER / TARGET_FILENAME_DATAOVERVIEW
     assert npz_path.exists()
