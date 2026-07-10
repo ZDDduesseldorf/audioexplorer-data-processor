@@ -1,5 +1,6 @@
 import numpy as np
 from pathlib import Path
+import json
 
 from app.schemas.model import DataOverviewJSON, CategoryListItem
 
@@ -73,8 +74,14 @@ def create_npz_file_from_list_DataOverview(
             dtype="U100",
         ),
         nearest_neighbors=np.array(
-            [data.nearest_neighbors for data in dataoverview],
-            dtype="U1000",
+            [
+                json.dumps(
+                    data.nearest_neighbors,
+                    ensure_ascii=False,
+                )
+                for data in dataoverview
+            ],
+            dtype="U10000",
         ),
     )
 

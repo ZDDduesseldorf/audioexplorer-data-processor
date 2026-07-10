@@ -34,7 +34,7 @@ def main() -> None:
         target_filename_dataoverview=TARGET_FILENAME_DATAOVERVIEW,
     )
 
-    import_data_overview(TARGET_AUDIO_FOLDER / "dataoverview.npz")
+    import_data_overview(TARGET_AUDIO_FOLDER / TARGET_FILENAME_DATAOVERVIEW)
 
     print("UMAP calculation finished.")
     print(f"Processed audio files saved to: {TARGET_AUDIO_FOLDER}")

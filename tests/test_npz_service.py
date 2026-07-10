@@ -3,6 +3,7 @@
 from types import SimpleNamespace
 
 import numpy as np
+import json
 import pytest
 
 from app.services.npz_service import (
@@ -84,7 +85,7 @@ def test_create_npz_file_from_list_dataoverview(tmp_path, capsys):
             anomalie_isolation_forest_label="anomaly",
             nearest_neighbors={
                 "uuid-4": 0.53402,
-                "uuid5": 0.66267,
+                "uuid-5": 0.66267,
             },
         ),
         SimpleNamespace(
@@ -183,27 +184,21 @@ def test_create_npz_file_from_list_dataoverview(tmp_path, capsys):
             data["anomalie_isolation_forest_labels"],
             np.array(["anomaly", "normal"], dtype="U100"),
         )
-        np.testing.assert_array_equal(
-            data["nearest_neighbors"],
-            np.array(
-                [
-                    {
-                        "uuid-4": 0.53402,
-                        "uuid5": 0.66267,
-                    },
-                    {
-                        "uuid-2": 0.53402,
-                        "uuid-3": 0.66267,
-                    },
-                ],
-                dtype="U1000",
-            ),
-        )
+
+        assert json.loads(data["nearest_neighbors"][0]) == {
+            "uuid-4": 0.53402,
+            "uuid-5": 0.66267,
+        }
+
+        assert json.loads(data["nearest_neighbors"][1]) == {
+            "uuid-2": 0.53402,
+            "uuid-3": 0.66267,
+        }
 
         assert data["umap"].shape == (2, 3)
         assert data["umap"].dtype == np.dtype(np.float64)
         assert data["filenames"].dtype == np.dtype("U255")
-        assert data["nearest_neighbors"].dtype == np.dtype("U1000")
+        assert data["nearest_neighbors"].dtype.kind == "U"
 
     captured = capsys.readouterr()
     assert captured.out == f"Created {target_path}\n"
