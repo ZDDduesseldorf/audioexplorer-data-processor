@@ -49,13 +49,17 @@ def create_npz_file_from_list_DataOverview(
             [data.category for data in dataoverview],
             dtype="U100",
         ),
-        filenames=np.array(
-            [data.filename for data in dataoverview],
+        original_filenames=np.array(
+            [data.original_filename for data in dataoverview],
             dtype="U255",
         ),
         sources=np.array(
             [data.source for data in dataoverview],
             dtype="U100",
+        ),
+        additional_information=np.array(
+            [json.dumps(data.additional_information) for data in dataoverview],
+            dtype="U10000",
         ),
         anomalie_isolation_forest=np.array(
             [data.anomalie_isolation_forest for data in dataoverview],

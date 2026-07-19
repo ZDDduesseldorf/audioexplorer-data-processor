@@ -40,19 +40,25 @@ def test_load_all_metadata(test_metadata):
         "0a0b8b81-6e0f-4a35-90cf-4cca0e4d3007": {
             "label": "laughing",
             "category": "laugh",
-            "filename": "a_RA1_01_01__xh6fC2ZfwU_moan.wav",
+            "original_filename": "a_RA1_01_01__xh6fC2ZfwU_moan.wav",
             "source": "nvv_clips",
+            "context": "baby",
+            "location": "home",
         },
         "0a0b8b81-6e0f-4a35-90cf-4cca0e4d3006": {
             "label": "crying",
             "category": "cry",
-            "filename": "a_RA2_056_XSoJqdPi4Iw_groaning.wav",
+            "original_filename": "a_RA2_056_XSoJqdPi4Iw_groaning.wav",
             "source": "nvv_clips",
+            "context": None,
+            "location": None,
         },
         "0a0b8b81-6e0f-4a35-90cf-4cca0e4d3005": {
             "label": "screaming",
             "category": "scream",
-            "filename": "a_RA2_093_FL1LUiqNITo_oohsound.wav",
+            "original_filename": "a_RA2_093_FL1LUiqNITo_oohsound.wav",
             "source": "nvv_clips",
+            "context": None,
+            "location": None,
         },
     }

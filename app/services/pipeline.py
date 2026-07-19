@@ -8,11 +8,15 @@ from app.processing.embeddings.embedding_service import (
 from app.processing.umap_service import calculate_umap_2d_from_list_embeddings
 from app.processing.nearest_neighbor_service import compute_nearest_neighbors
 from app.processing.anomaly_detection.anomaly_service import AnomalyService
-from app.services.npz_service import create_npz_file_from_list_DataOverview
+from app.services.npz_service import (
+    create_npz_file_from_list_DataOverview,
+    create_npz_file_from_category_list_json,
+)
+from app.processing.utils.json_utils import load_all_categories
 from pathlib import Path
 
 
-def calculate_umap_from_audio(
+def calculate_dataoverview_from_audio(
     path_audio_folder: Path,
     filename_metadata: str,
     target_path_audios: Path,
@@ -86,6 +90,13 @@ def calculate_umap_from_audio(
     create_npz_file_from_list_DataOverview(list_DataOverview, target_path_dataoverview)
 
 
+def calculate_categories(target_folder_path, target_filename):
+    list_categorys = load_all_categories()
+    target_path_category = target_folder_path / target_filename
+    target_folder_path.mkdir(parents=True, exist_ok=True)
+    create_npz_file_from_category_list_json(list_categorys, target_path_category)
+
+
 def save_results_as_json(
     list_DataOverview: list[DataOverviewJSON], target_json_path: Path
 ) -> None:
@@ -99,8 +110,9 @@ def save_results_as_json(
             "umap_z": item.umap_z,
             "label": item.label,
             "category": item.category,
-            "filename": item.filename,
+            "original_filename": item.original_filename,
             "source": item.source,
+            "additional_information": item.additional_information,
             "anomalie_isolation_forest": item.anomalie_isolation_forest,
             "anomalie_LOF": item.anomalie_LOF,
             "anomalie_isolation_forest_label": item.anomalie_isolation_forest_label,
@@ -109,9 +121,6 @@ def save_results_as_json(
         }
 
     write_json_file(target_json_path, result)
-
-
-# TODO: def save_embeddings_as_json(embeddings):
 
 
 def create_DataOverview(
@@ -142,6 +151,14 @@ def create_DataOverview(
             print(f"UUID is missing in nn_results: {uuid}")
             continue
 
+        additional_information = {}
+
+        if metadata.get("context") is not None:
+            additional_information["context"] = metadata["context"]
+
+        if metadata.get("location") is not None:
+            additional_information["location"] = metadata["location"]
+
         dataOverview_uuid = DataOverviewJSON(
             uuid=uuid,
             umap_x=item["umap_x"],
@@ -149,8 +166,9 @@ def create_DataOverview(
             umap_z=item["umap_z"],
             label=metadata["label"],
             category=metadata["category"],
-            filename=metadata["filename"],
+            original_filename=metadata["original_filename"],
             source=metadata["source"],
+            additional_information=additional_information,
             anomalie_isolation_forest=anomaly["scores"]["isolation_forest"],
             anomalie_LOF=anomaly["scores"]["lof"],
             anomalie_isolation_forest_label=anomaly["labels"]["isolation_forest"],

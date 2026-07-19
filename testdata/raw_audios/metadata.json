@@ -5,7 +5,9 @@
     "label": "laughing",
     "category": "laugh",
     "duration": 0.2,
-    "source": "nvv_clips"
+    "source": "nvv_clips",
+    "context": "baby",
+    "location": "home"
   },
   {
     "uuid": "0a0b8b81-6e0f-4a35-90cf-4cca0e4d3006",

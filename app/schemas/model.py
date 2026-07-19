@@ -24,8 +24,9 @@ class DataOverviewJSON(BaseModel):
     umap_z: float
     label: str
     category: str
-    filename: str
+    original_filename: str
     source: str
+    additional_information: dict[str, str | None] | None = None
     anomalie_isolation_forest: float
     anomalie_LOF: float
     anomalie_isolation_forest_label: str

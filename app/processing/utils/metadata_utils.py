@@ -19,8 +19,10 @@ def load_all_metadata(path_metadata: Path) -> dict:
         metadata[row.uuid] = {
             "label": row.label,
             "category": row.category,
-            "filename": row.filename,
+            "original_filename": row.filename,
             "source": row.source,
+            "context": None if pd.isna(row.get("context")) else row.get("context"),
+            "location": None if pd.isna(row.get("location")) else row.get("location"),
         }
 
     return metadata
