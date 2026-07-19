@@ -29,4 +29,5 @@ TARGET_AUDIO_FOLDER = Path(
     )
 )
 
-TARGET_JSON_FILENAME = "data_overview.json"
+TARGET_FILENAME_DATAOVERVIEW = "data_overview.npz"
+TARGET_FILENAME_CATEGORYS = "category.npz"

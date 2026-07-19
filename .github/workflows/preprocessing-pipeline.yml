@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: 00 - Checkout repository
         uses: actions/checkout@v4
-      
+
       - name: Free Disk Space
         uses: jlumbroso/free-disk-space@v1.3.1
         with:
@@ -33,7 +33,7 @@ jobs:
           haskell: true
           large-packages: true
           swap: false
-      
+
       - name: 01 - Set up Python
         uses: actions/setup-python@v6
         with:
@@ -131,11 +131,10 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
-
-      - name: 12 - Docker Smoke Test
+      - name: 12 - Integration Tests
         run: |
-          echo "Schritt Docker Smoke Test ist erreicht"
+          echo "Step Integration Test is reached"
 
-          echo "::group::Run Docker container"
-          docker run --rm audioexplorer-processing-app
+          echo "::group::Run Integration tests"
+          python -m pytest integration_tests -v
           echo "::endgroup::"
