@@ -9,7 +9,7 @@ from app.schemas.model import EmbeddingData
 
 _N_PCA_COMPONENTS: int = 50
 _N_UMAP_NEIGHBORS: int = 15
-_UMAP_MIN_DIST: float = 0.1
+_UMAP_MIN_DIST: float = 0.8
 
 
 def calculate_umap_2d_from_list_embeddings(embeddings: list[EmbeddingData]):
