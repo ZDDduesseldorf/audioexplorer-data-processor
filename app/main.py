@@ -1,4 +1,7 @@
-from app.services.pipeline import calculate_umap_from_audio
+from app.services.pipeline import (
+    calculate_dataoverview_from_audio,
+    calculate_categories,
+)
 from app.config import (
     RAW_AUDIO_FOLDER,
     METADATA_FILENAME,
@@ -7,8 +10,7 @@ from app.config import (
     TARGET_FILENAME_DATAOVERVIEW,
 )
 
-from app.processing.utils.json_utils import load_all_categories
-from app.services.npz_service import create_npz_file_from_category_list_json
+
 from app.services.api_import_service import import_categories, import_data_overview
 
 
@@ -18,16 +20,17 @@ def run() -> str:
 
 def main() -> None:
     print("Create Category.npz")
-    list_categorys = load_all_categories()
-    target_path_category = TARGET_AUDIO_FOLDER / TARGET_FILENAME_CATEGORYS
-    create_npz_file_from_category_list_json(list_categorys, target_path_category)
-    import_categories(target_path_category)
 
-    import_categories
+    calculate_categories(
+        target_folder_path=TARGET_AUDIO_FOLDER,
+        target_filename=TARGET_FILENAME_CATEGORYS,
+    )
+
+    import_categories(TARGET_AUDIO_FOLDER / TARGET_FILENAME_CATEGORYS)
 
     print("Starting UMAP calculation from audio...")
 
-    calculate_umap_from_audio(
+    calculate_dataoverview_from_audio(
         path_audio_folder=RAW_AUDIO_FOLDER,
         filename_metadata=METADATA_FILENAME,
         target_path_audios=TARGET_AUDIO_FOLDER,

@@ -10,14 +10,18 @@ def sample_metadata_results():
         "1": {
             "label": "laughing",
             "category": "laugh",
-            "filename": "1.wav",
+            "original_filename": "1.wav",
             "source": "nvv_clips",
+            "context": "baby",
+            "location": "home",
         },
         "2": {
             "label": "crying",
             "category": "cry",
-            "filename": "2.wav",
+            "original_filename": "2.wav",
             "source": "nvv_clips",
+            "context": None,
+            "location": None,
         },
     }
 
@@ -93,6 +97,11 @@ def test_create_DataOverview(
     assert response[0].anomalie_LOF == 1.2
     assert response[0].nearest_neighbors == {"2": 0.083}
     assert response[0].source == "nvv_clips"
+    assert response[0].additional_information == {
+        "context": "baby",
+        "location": "home",
+    }
+    assert response[1].additional_information == {}
 
 
 def test_create_data_overview_skips_missing_nn(
@@ -128,14 +137,15 @@ def test_save_results_as_json(tmp_path):
             umap_z=3.0,
             label="laughing",
             category="laugh",
-            filename="uuid_1.wav",
+            original_filename="uuid_1.wav",
             source="nvv_clips",
+            additional_information={"context": "baby", "location": "home"},
             anomalie_isolation_forest=0.0,
             anomalie_LOF=0.0,
             anomalie_isolation_forest_label="unknown",
             anomalie_LOF_label="unknown",
             nearest_neighbors={"uuid_2": 0.083},
-        )
+        ),
     ]
 
     output_file = tmp_path / "data_overview.json"

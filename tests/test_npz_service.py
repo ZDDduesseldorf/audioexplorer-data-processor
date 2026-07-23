@@ -1,7 +1,3 @@
-# tests/test_npz_export.py
-
-from types import SimpleNamespace
-
 import numpy as np
 import json
 import pytest
@@ -10,12 +6,13 @@ from app.services.npz_service import (
     create_npz_file_from_category_list_json,
     create_npz_file_from_list_DataOverview,
 )
+from app.schemas.model import DataOverviewJSON, CategoryListItem
 
 
 def test_create_npz_file_from_category_list_json(tmp_path, capsys):
     categories = [
-        SimpleNamespace(id=1, key="cat_a", name="Kategorie A"),
-        SimpleNamespace(id=2, key="cat_b", name="Kategorie B"),
+        CategoryListItem(id=1, key="cat_a", name="Kategorie A"),
+        CategoryListItem(id=2, key="cat_b", name="Kategorie B"),
     ]
     target_path = tmp_path / "categories.npz"
 
@@ -70,14 +67,15 @@ def test_create_npz_file_from_empty_category_list(tmp_path):
 
 def test_create_npz_file_from_list_dataoverview(tmp_path, capsys):
     dataoverview = [
-        SimpleNamespace(
+        DataOverviewJSON(
             uuid="123e4567-e89b-12d3-a456-426614174000",
             umap_x=1.25,
             umap_y=2.5,
             umap_z=3.75,
             label="Label A",
             category="category_a",
-            filename="file_a.wav",
+            original_filename="file_a.wav",
+            additional_information={"context": "baby", "location": "home"},
             source="source_a",
             anomalie_isolation_forest=0.1,
             anomalie_LOF=0.2,
@@ -88,14 +86,15 @@ def test_create_npz_file_from_list_dataoverview(tmp_path, capsys):
                 "uuid-5": 0.66267,
             },
         ),
-        SimpleNamespace(
+        DataOverviewJSON(
             uuid="123e4567-e89b-12d3-a456-426614174001",
             umap_x=-1.0,
             umap_y=0.0,
             umap_z=5.5,
             label="Label B",
             category="category_b",
-            filename="file_b.wav",
+            original_filename="file_b.wav",
+            additional_information={},
             source="source_b",
             anomalie_isolation_forest=-0.3,
             anomalie_LOF=1.5,
@@ -119,8 +118,9 @@ def test_create_npz_file_from_list_dataoverview(tmp_path, capsys):
             "umap",
             "labels",
             "category_keys",
-            "filenames",
+            "original_filenames",
             "sources",
+            "additional_information",
             "anomalie_isolation_forest",
             "anomalie_lof",
             "anomalie_lof_labels",
@@ -159,13 +159,20 @@ def test_create_npz_file_from_list_dataoverview(tmp_path, capsys):
             np.array(["category_a", "category_b"], dtype="U100"),
         )
         np.testing.assert_array_equal(
-            data["filenames"],
+            data["original_filenames"],
             np.array(["file_a.wav", "file_b.wav"], dtype="U255"),
         )
         np.testing.assert_array_equal(
             data["sources"],
             np.array(["source_a", "source_b"], dtype="U100"),
         )
+
+        assert json.loads(data["additional_information"][0]) == {
+            "context": "baby",
+            "location": "home",
+        }
+
+        assert json.loads(data["additional_information"][1]) == {}
 
         np.testing.assert_allclose(
             data["anomalie_isolation_forest"],
@@ -197,7 +204,7 @@ def test_create_npz_file_from_list_dataoverview(tmp_path, capsys):
 
         assert data["umap"].shape == (2, 3)
         assert data["umap"].dtype == np.dtype(np.float64)
-        assert data["filenames"].dtype == np.dtype("U255")
+        assert data["original_filenames"].dtype == np.dtype("U255")
         assert data["nearest_neighbors"].dtype.kind == "U"
 
     captured = capsys.readouterr()
@@ -216,8 +223,9 @@ def test_create_npz_file_from_empty_dataoverview_list(tmp_path):
         assert data["umap"].shape == (0,)
         assert data["labels"].shape == (0,)
         assert data["category_keys"].shape == (0,)
-        assert data["filenames"].shape == (0,)
+        assert data["original_filenames"].shape == (0,)
         assert data["sources"].shape == (0,)
+        assert data["additional_information"].shape == (0,)
         assert data["anomalie_isolation_forest"].shape == (0,)
         assert data["anomalie_lof"].shape == (0,)
         assert data["anomalie_lof_labels"].shape == (0,)
