@@ -1,8 +1,9 @@
 import numpy as np
-from app.schemas.model import EmbeddingData
+
 from app.processing.anomaly_detection.anomaly_service import (
     AnomalyService,
 )
+from app.schemas.model import EmbeddingData
 
 # LOCAL TEST:
 # PYTHONPATH=. pytest tests/test_calculate_anomalies_function.py -v

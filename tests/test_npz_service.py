@@ -1,12 +1,13 @@
-import numpy as np
 import json
+
+import numpy as np
 import pytest
 
+from app.schemas.model import CategoryListItem, DataOverviewJSON
 from app.services.npz_service import (
     create_npz_file_from_category_list_json,
     create_npz_file_from_list_DataOverview,
 )
-from app.schemas.model import DataOverviewJSON, CategoryListItem
 
 
 def test_create_npz_file_from_category_list_json(tmp_path, capsys):

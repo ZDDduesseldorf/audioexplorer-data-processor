@@ -1,19 +1,19 @@
-from app.processing.anomaly_detection.detectors.isolation_forest_detector import (
-    IsolationForestDetector,
-)
-# Import the Isolation Forest anomaly detector.
-
-from app.processing.anomaly_detection.detectors.lof_detector import (
-    LocalOutlierFactorDetector,
-)
 # Import the Local Outlier Factor anomaly detector.
-
 from app.processing.anomaly_detection.anomaly_labeler import (
     AnomalyLabeler,
 )
-# Import the utility class for converting scores into anomaly labels.
+from app.processing.anomaly_detection.detectors.isolation_forest_detector import (
+    IsolationForestDetector,
+)
 
+# Import the Isolation Forest anomaly detector.
+from app.processing.anomaly_detection.detectors.lof_detector import (
+    LocalOutlierFactorDetector,
+)
+
+# Import the utility class for converting scores into anomaly labels.
 from app.schemas.model import EmbeddingData
+
 # Orchestrate the complete anomaly detection workflow by:
 # - extracting embeddings
 # - running Isolation Forest and LOF detectors

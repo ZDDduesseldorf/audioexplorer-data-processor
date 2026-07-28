@@ -1,13 +1,23 @@
-import numpy as np
-from pathlib import Path
 import json
+from pathlib import Path
 
-from app.schemas.model import DataOverviewJSON, CategoryListItem
+import numpy as np
+
+from app.schemas.model import CategoryListItem, DataOverviewJSON
 
 
 def create_npz_file_from_category_list_json(
     list_categorys: list[CategoryListItem], target_path: Path
 ):
+    """Store category information as a compressed NPZ file.
+
+    Converts a list of ``CategoryListItem`` objects into NumPy arrays and
+    saves them as a compressed NPZ file.
+
+    Args:
+        list_categorys: List of category objects to store.
+        target_path: Path of the output NPZ file.
+    """
     np.savez_compressed(
         target_path,
         ids=np.array(
@@ -30,7 +40,20 @@ def create_npz_file_from_category_list_json(
 def create_npz_file_from_list_DataOverview(
     dataoverview: list[DataOverviewJSON], target_path: Path
 ):
+    """Store DataOverview objects as a compressed NPZ file.
 
+    Converts a list of ``DataOverviewJSON`` objects into NumPy arrays and
+    stores the contained metadata, UMAP coordinates, anomaly scores, labels,
+    nearest-neighbor information, and additional information in a compressed
+    NPZ file.
+
+    Complex fields such as ``additional_information`` and
+    ``nearest_neighbors`` are serialized as JSON strings before being stored.
+
+    Args:
+        dataoverview: List of DataOverview objects to serialize.
+        target_path: Path of the output NPZ file.
+    """
     np.savez_compressed(
         target_path,
         uuids=np.array(

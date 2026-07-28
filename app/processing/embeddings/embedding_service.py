@@ -3,9 +3,9 @@
 import numpy as np
 import torch
 
-from app.processing.embeddings.model_manager import ModelManager
 from app.processing.audio.audio_config import AudioPreprocessingConfig
-from app.schemas.model import PreprocessedAudio, EmbeddingData
+from app.processing.embeddings.model_manager import ModelManager
+from app.schemas.model import EmbeddingData, PreprocessedAudio
 
 
 def compute_embedding(waveform: np.ndarray, manager: ModelManager) -> np.ndarray:

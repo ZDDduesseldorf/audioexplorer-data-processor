@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from app.processing.audio.audio_config import AudioPreprocessingConfig
 from app.processing.audio.filter import (
     AudioLengthFilter,
@@ -8,7 +10,6 @@ from app.processing.audio.loader import LocalAudioLoader
 from app.processing.audio.resampler import AudioResampler
 from app.processing.audio.saver import AudioSaver
 from app.schemas.model import PreprocessedAudio
-from pathlib import Path
 
 
 def run_audio_preprocessing(

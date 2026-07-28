@@ -1,5 +1,5 @@
-import pytest
 import numpy as np
+import pytest
 
 from app.processing.anomaly_detection.anomaly_service import (
     AnomalyService,

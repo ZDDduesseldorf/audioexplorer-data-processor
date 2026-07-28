@@ -1,7 +1,8 @@
-import app.processing.utils.metadata_utils as meta
-from app.config import get_data_file_path
 import pandas as pd
 import pytest
+
+import app.processing.utils.metadata_utils as meta
+from app.config import get_data_file_path
 
 
 @pytest.fixture

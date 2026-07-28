@@ -1,5 +1,7 @@
-import pytest
 import json
+
+import pytest
+
 import app.services.pipeline as pipe
 from app.schemas.model import DataOverviewJSON
 

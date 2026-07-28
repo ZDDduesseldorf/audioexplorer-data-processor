@@ -7,7 +7,6 @@
 # for numerical and array operations.
 import numpy as np
 
-
 # Import the Isolation Forest algorithm from
 # scikit-learn for anomaly detection.
 from sklearn.ensemble import IsolationForest

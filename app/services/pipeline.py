@@ -1,19 +1,19 @@
-from app.schemas.model import DataOverviewJSON
-from app.processing.utils.json_utils import write_json_file
-from app.processing.utils.metadata_utils import load_all_metadata
-from app.services.run_audio_preprocessing import run_audio_preprocessing
+from pathlib import Path
+
+from app.processing.anomaly_detection.anomaly_service import AnomalyService
 from app.processing.embeddings.embedding_service import (
     compute_embedding_from_list_ProcessedAudios,
 )
-from app.processing.umap_service import calculate_umap_2d_from_list_embeddings
 from app.processing.nearest_neighbor_service import compute_nearest_neighbors
-from app.processing.anomaly_detection.anomaly_service import AnomalyService
+from app.processing.umap_service import calculate_umap_2d_from_list_embeddings
+from app.processing.utils.json_utils import load_all_categories, write_json_file
+from app.processing.utils.metadata_utils import load_all_metadata
+from app.schemas.model import DataOverviewJSON
 from app.services.npz_service import (
-    create_npz_file_from_list_DataOverview,
     create_npz_file_from_category_list_json,
+    create_npz_file_from_list_DataOverview,
 )
-from app.processing.utils.json_utils import load_all_categories
-from pathlib import Path
+from app.services.run_audio_preprocessing import run_audio_preprocessing
 
 
 def calculate_dataoverview_from_audio(
@@ -22,7 +22,27 @@ def calculate_dataoverview_from_audio(
     target_path_audios: Path,
     target_filename_dataoverview: str,
 ):
-    """Calculate UMAP embeddings and anomaly scores from audio files and save the results as a JSON file."""
+    """Generate a DataOverview dataset from audio files.
+
+    This function preprocesses audio files, computes embeddings, nearest
+    neighbors, anomaly scores, and UMAP coordinates, combines the results
+    with the corresponding metadata, and stores the resulting DataOverview
+    objects as an NPZ file.
+
+    The input directory can either contain audio files directly or multiple
+    subdirectories, each with its own metadata file.
+
+    Args:
+        path_audio_folder: Directory containing audio files or subdirectories
+            with audio files and metadata.
+        filename_metadata: Name of the metadata file (e.g. ``metadata.json``).
+        target_path_audios: Directory where processed audio files and the
+            resulting DataOverview file will be stored.
+        target_filename_dataoverview: Name of the output NPZ file.
+
+    Raises:
+        ValueError: If no audio files are found in the input directory.
+    """
 
     all_audios = []
     all_metadata = {}
@@ -91,6 +111,15 @@ def calculate_dataoverview_from_audio(
 
 
 def calculate_categories(target_folder_path, target_filename):
+    """Generate and save the category overview.
+
+    Loads all available categories and stores them as an NPZ file in the
+    specified target directory.
+
+    Args:
+        target_folder_path: Directory where the category file should be saved.
+        target_filename: Name of the output NPZ file.
+    """
     list_categorys = load_all_categories()
     target_path_category = target_folder_path / target_filename
     target_folder_path.mkdir(parents=True, exist_ok=True)
@@ -100,7 +129,15 @@ def calculate_categories(target_folder_path, target_filename):
 def save_results_as_json(
     list_DataOverview: list[DataOverviewJSON], target_json_path: Path
 ) -> None:
-    """Save a list of DataOverviewJSON objects to a JSON file at the specified target path."""
+    """Save DataOverview objects as a JSON file.
+
+    Converts a list of ``DataOverviewJSON`` objects into a dictionary keyed
+    by UUID and writes the result to a JSON file.
+
+    Args:
+        list_DataOverview: List of DataOverview objects to serialize.
+        target_json_path: Path to the output JSON file.
+    """
     result = {}
 
     for item in list_DataOverview:
@@ -129,7 +166,22 @@ def create_DataOverview(
     anomaly_results: dict,
     nn_results: dict,
 ) -> list[DataOverviewJSON]:
-    """Create a list of DataOverviewJSON objects from metadata, UMAP, anomaly and nearest neighbor results."""
+    """Create DataOverview objects from analysis results.
+
+    Combines metadata, UMAP coordinates, anomaly detection results, and
+    nearest-neighbor information into a list of ``DataOverviewJSON`` objects.
+    Entries with missing metadata or analysis results are skipped.
+
+    Args:
+        metadata_results: Mapping of UUIDs to metadata dictionaries.
+        umap_results: Mapping of UUIDs to computed UMAP coordinates.
+        anomaly_results: Mapping of UUIDs to anomaly detection scores and
+            labels.
+        nn_results: Mapping of UUIDs to nearest-neighbor information.
+
+    Returns:
+        A list of populated ``DataOverviewJSON`` objects.
+    """
     list_DataOverview = []
 
     for uuid, item in umap_results.items():

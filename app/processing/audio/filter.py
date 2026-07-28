@@ -14,7 +14,7 @@ class AudioLengthFilter:
         if duration_seconds < min_duration_seconds:
             return False
 
-        if max_duration_seconds is not None and duration_seconds > max_duration_seconds:
+        if max_duration_seconds is not None and duration_seconds > max_duration_seconds:  # noqa: SIM103
             return False
 
         return True
