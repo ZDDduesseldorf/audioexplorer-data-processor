@@ -8,6 +8,7 @@ from app.schemas.model import DataOverviewJSON
 
 @pytest.fixture
 def sample_metadata_results():
+    """Provide sample metadata results for pipeline tests."""
     return {
         "1": {
             "label": "laughing",
@@ -30,6 +31,7 @@ def sample_metadata_results():
 
 @pytest.fixture
 def sample_umap_results():
+    """Provide sample UMAP results for pipeline tests."""
     return {
         "1": {
             "umap_x": 0.1,
@@ -46,6 +48,7 @@ def sample_umap_results():
 
 @pytest.fixture
 def sample_anomaly_results():
+    """Provide sample anomaly results for pipeline tests."""
     return {
         "1": {
             "scores": {
@@ -72,6 +75,7 @@ def sample_anomaly_results():
 
 @pytest.fixture
 def sample_nn_results():
+    """Provide sample nearest-neighbor results for pipeline tests."""
     return {
         "1": {"2": 0.083},
         "2": {"1": 0.043},
@@ -84,7 +88,7 @@ def test_create_DataOverview(
     sample_anomaly_results,
     sample_nn_results,
 ):
-    # TODO: anomaly ergänzen
+    """Test that DataOverview objects are created correctly."""
     response = pipe.create_DataOverview(
         sample_metadata_results,
         sample_umap_results,
@@ -109,6 +113,7 @@ def test_create_DataOverview(
 def test_create_data_overview_skips_missing_nn(
     sample_metadata_results, sample_umap_results, sample_anomaly_results
 ):
+    """Test that entries without nearest-neighbor results are skipped."""
     nn_results = {}
 
     result = pipe.create_DataOverview(
@@ -121,6 +126,7 @@ def test_create_data_overview_skips_missing_nn(
 def test_create_data_overview_skips_missing_metadata(
     sample_umap_results, sample_anomaly_results, sample_nn_results
 ):
+    """Test that entries without metadata are skipped."""
     metadata_results = {}
 
     result = pipe.create_DataOverview(
@@ -131,6 +137,7 @@ def test_create_data_overview_skips_missing_metadata(
 
 
 def test_save_results_as_json(tmp_path):
+    """Test that DataOverview results are saved correctly as JSON."""
     data_overview = [
         DataOverviewJSON(
             uuid="uuid_1",

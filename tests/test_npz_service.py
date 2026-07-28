@@ -11,6 +11,7 @@ from app.services.npz_service import (
 
 
 def test_create_npz_file_from_category_list_json(tmp_path, capsys):
+    """Test that category data is stored correctly in an NPZ file."""
     categories = [
         CategoryListItem(id=1, key="cat_a", name="Kategorie A"),
         CategoryListItem(id=2, key="cat_b", name="Kategorie B"),
@@ -50,6 +51,7 @@ def test_create_npz_file_from_category_list_json(tmp_path, capsys):
 
 
 def test_create_npz_file_from_empty_category_list(tmp_path):
+    """Test that an empty category list creates valid empty arrays."""
     target_path = tmp_path / "empty_categories.npz"
 
     create_npz_file_from_category_list_json([], target_path)
@@ -67,6 +69,7 @@ def test_create_npz_file_from_empty_category_list(tmp_path):
 
 
 def test_create_npz_file_from_list_dataoverview(tmp_path, capsys):
+    """Test that DataOverview data is stored correctly in an NPZ file."""
     dataoverview = [
         DataOverviewJSON(
             uuid="123e4567-e89b-12d3-a456-426614174000",
@@ -213,6 +216,7 @@ def test_create_npz_file_from_list_dataoverview(tmp_path, capsys):
 
 
 def test_create_npz_file_from_empty_dataoverview_list(tmp_path):
+    """Test that an empty DataOverview list creates valid empty arrays."""
     target_path = tmp_path / "empty_dataoverview.npz"
 
     create_npz_file_from_list_DataOverview([], target_path)
@@ -246,6 +250,7 @@ def test_create_npz_file_fails_when_parent_directory_does_not_exist(
     function,
     filename,
 ):
+    """Test that NPZ creation fails when the parent directory is missing."""
     target_path = tmp_path / filename
 
     with pytest.raises(FileNotFoundError):
