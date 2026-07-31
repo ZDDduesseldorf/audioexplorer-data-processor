@@ -1,16 +1,19 @@
-import app.processing.utils.metadata_utils as meta
-from app.config import get_data_file_path
 import pandas as pd
 import pytest
+
+import app.processing.utils.metadata_utils as meta
+from app.config import get_data_file_path
 
 
 @pytest.fixture
 def test_metadata():
+    """Provide the path to the test metadata file."""
     metadata_path = get_data_file_path("raw_audios/metadata.json")
     return metadata_path
 
 
 def test_load_metadata_as_df(tmp_path):
+    """Test that metadata is loaded correctly into a DataFrame."""
     file = tmp_path / "meta.json"
 
     expected = pd.DataFrame(
@@ -33,6 +36,7 @@ def test_load_metadata_as_df(tmp_path):
 
 
 def test_load_all_metadata(test_metadata):
+    """Test that metadata is loaded and mapped correctly by UUID."""
     metadata = meta.load_all_metadata(test_metadata)
 
     assert len(metadata) == 3

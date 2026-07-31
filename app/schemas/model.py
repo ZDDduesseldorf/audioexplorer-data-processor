@@ -1,6 +1,5 @@
-from pydantic import BaseModel, ConfigDict
-
 import numpy as np
+from pydantic import BaseModel, ConfigDict
 
 
 class PreprocessedAudio(BaseModel):

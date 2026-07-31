@@ -3,7 +3,6 @@ from unittest.mock import patch
 
 import numpy as np
 
-
 from app.processing.audio.loader import LocalAudioLoader
 
 TEST_SAMPLE_RATE = 48_000

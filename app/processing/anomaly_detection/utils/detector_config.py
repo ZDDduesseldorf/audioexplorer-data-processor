@@ -3,7 +3,7 @@ class DetectorConfig:
     # ISOLATION FOREST
     # -----------------------------------
 
-    ISOLATION_FOREST = {
+    ISOLATION_FOREST = {  # noqa: RUF012
         # Controls how difficult it is for a data point to be classified as an anomaly.
         # Represents the expected proportion of anomalies in the dataset.
         # Currently assumes that approximately 3% of samples are anomalous.
@@ -20,7 +20,7 @@ class DetectorConfig:
     # LOCAL OUTLIER FACTOR
     # -----------------------------------
 
-    LOF = {
+    LOF = {  # noqa: RUF012
         # Controls how difficult it is for a data point to be classified as an anomaly.
         # Has the same meaning as the contamination parameter in Isolation Forest.
         # Currently assumes that approximately 7% of samples are anomalous.

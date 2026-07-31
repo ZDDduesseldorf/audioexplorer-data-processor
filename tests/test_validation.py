@@ -1,5 +1,5 @@
-import pytest
 import numpy as np
+import pytest
 
 from app.processing.anomaly_detection.utils.validation import (
     validate_embeddings,

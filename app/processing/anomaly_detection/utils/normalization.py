@@ -1,4 +1,5 @@
 import numpy as np
+
 # Import NumPy and use the alias 'np' for numerical calculations.
 
 # Normalize anomaly scores using Min-Max scaling.

@@ -1,10 +1,10 @@
 import numpy as np
 
-from app.schemas.model import EmbeddingData
 from app.processing.nearest_neighbor_service import (
     _compute_neighbor_matrix,
     compute_nearest_neighbors,
 )
+from app.schemas.model import EmbeddingData
 
 
 def _fake_embeddings(n: int, dims: int = 512) -> list[EmbeddingData]:
