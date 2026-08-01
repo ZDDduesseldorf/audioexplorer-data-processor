@@ -143,6 +143,65 @@ Further details about each processing stage are provided in the following sectio
 ## Categories
 
 ## Audio Preprocessing
+### Overview
+Audio preprocessing is the first step in the processing pipeline. It prepares raw audio files for further analysis by standardizing sample rates, filtering invalid audio files, reducing noise, and ensuring consistent audio quality. 
+
+### Processing Steps
+The preprocessing pipeline applies the following transformations to each audio file in sequence:
+
+1. Mono Conversion & Resampling
+<br>
+Audio files are converted to mono and resampled to 48,000 Hz using Librosa resampling. This ensures compatibility with the CLAP embedding model that requires mono, 48 kHz input.
+
+2. Length Filtering
+<br>
+Filters out audio files that do not meet duration requirements:
+<br>
+Minimum duration: 0.1 seconds <br>
+Maximum duration: 30 seconds <br>
+Audio files outside this range are excluded from further processing and logged as rejected samples.
+
+3. Silence Filtering
+<br>
+Removes audio files that contain insufficient acoustic content by analyzing the Root Mean Square (RMS) energy. Files with RMS energy below the threshold of 0.005 are filtered out, as they typically contain only silence or very low-level noise.
+
+4. Noise Reduction
+<br>
+Applies adaptive noise reduction to suppress background noise. A noise floor is estimated from quiet parts of the audio, and samples below this threshold are soft-suppressed based on the configured strength.
+
+### Configuration
+
+**Model Dependencies:**
+The preprocessing parameters are optimized for the CLAP (Contrastive Language-Audio Pre-training) embedding model from Hugging Face (laion/larger_clap_general). If using a different embedding model, adjust these parameters accordingly.
+
+Default preprocessing parameters can be modified via environment variables or by editing `audio_config.py`:
+
+| Parameter | Default | Description |
+| --- | --- | --- |
+| `target_sample_rate` | 48,000 Hz | Target sample rate for resampling - must match model requirements |
+| `apply_length_filter` | true | Enable/disable duration filtering |
+| `min_duration_seconds` | 0.1 | Minimum audio duration in seconds |
+| `max_duration_seconds` | 30.0 | Maximum audio duration in seconds |
+| `apply_silence_filter` | true | Enable/disable silence filtering |
+| `silence_rms_threshold` | 0.005 | RMS energy threshold for silence detection |
+| `apply_noise_reduction` | true | Enable/disable noise reduction |
+| `noise_reduction_strength` | 1.0 | Strength factor for noise reduction (0-1) |
+
+
+### Input & Output
+
+**Input**: Raw audio files in various formats (WAV, MP3, FLAC, etc.) with different sample rates, typically sourced from `raw_audios/` directory with accompanying `metadata.json`.
+
+**Output**: Preprocessed mono audio files saved to `processed_audios/` directory in WAV format at 48 kHz. Only audio files that pass all filtering criteria are output.
+
+### Impementation Details
+The audio preprocessing is implemented in `app/processing/audio/`:
+
+- `audio_config.py` - Configuration parameters
+- `resampler.py` - Sample rate conversion using Librosa
+- `filter.py` - Duration, silence, and noise reduction filters
+- `loader.py` - Audio file loading
+- `saver.py` - Preprocessed audio file saving
 
 ## Embedding calculation
 
