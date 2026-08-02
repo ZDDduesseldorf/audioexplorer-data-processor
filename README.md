@@ -210,3 +210,73 @@ The audio preprocessing is implemented in `app/processing/audio/`:
 ## UMAP
 
 ## Anomaly Detection
+
+The anomaly detection module identifies unusual audio samples based on their embedding vectors.
+
+The complete workflow is coordinated by the `AnomalyService`, which executes two complementary anomaly detection algorithms, combines their results, assigns human-readable labels, and returns a structured output dictionary.
+
+---
+
+The anomaly detection pipeline utilizes two unsupervised machine learning algorithms provided by the **scikit-learn** library: **Isolation Forest** and **Local Outlier Factor (LOF)**.
+
+Both detectors validate the input embeddings, compute anomaly scores, normalize the scores, and return structured results for further analysis and visualization.
+
+---
+
+The algorithms return raw anomaly scores rather than percentages. These raw values are relative model outputs and differ between Isolation Forest and LOF. To provide a consistent and interpretable representation, the scores are inverted where necessary and normalized to a shared range between **0 and 100** using Min-Max normalization.
+
+The resulting percentage expresses the relative anomaly strength within the analyzed dataset. Finally, each normalized anomaly score is rounded to two decimal places before being added to the result dictionary.
+
+### Isolation Forest
+
+The Isolation Forest implementation is based on:
+
+```python
+from sklearn.ensemble import IsolationForest
+```
+
+Isolation Forest detects **global anomalies** by recursively partitioning the embedding space using randomly generated decision trees. Samples that require fewer partitions to become isolated receive higher anomaly scores.
+
+### Local Outlier Factor (LOF)
+
+The Local Outlier Factor implementation is based on:
+
+```python
+from sklearn.neighbors import LocalOutlierFactor
+```
+
+Local Outlier Factor (LOF) detects **local anomalies** by comparing the local density around each embedding with the density of its nearest neighbors. Embeddings located in significantly lower-density regions than their surrounding neighborhood receive higher anomaly scores.
+
+### Score Normalization
+
+Since the two algorithms produce scores on different numerical scales, all raw anomaly scores are normalized to a common range between **0 and 100** using Min-Max normalization. This enables a direct comparison between the outputs of both algorithms.
+
+### Label Assignment
+
+Normalized anomaly scores are converted into the following human-readable categories using the `AnomalyLabeler`:
+
+- Not Anomalous
+- Slightly Anomalous
+- Anomalous
+- Highly Anomalous
+
+### Output
+
+The anomaly detection service returns one result entry for each embedding.
+
+```json
+{
+    "uuid1": {
+        "scores": {
+            "isolation_forest": 58.03,
+            "lof": 88.04
+        },
+        "labels": {
+            "isolation_forest": "Anomalous",
+            "lof": "Highly Anomalous"
+        }
+    }
+}
+```
+
+The returned dictionary contains the normalized anomaly scores and their corresponding labels for both Isolation Forest and Local Outlier Factor, indexed by the embedding UUID.
