@@ -239,9 +239,156 @@ The audio preprocessing is implemented in `app/processing/audio/`:
 
 ## Embedding calculation
 
+Embeddings turn each preprocessed waveform into a fixed-length numeric vector. All downstream steps (nearest neighbours, UMAP, anomaly detection) operate on these vectors only — never on the raw audio.
+
+### Model
+
+| Property | Value |
+| --- | --- |
+| Model | `laion/larger_clap_general` (CLAP — Contrastive Language-Audio Pre-training) |
+| Source | Hugging Face `transformers` (`ClapModel` + `ClapProcessor`) |
+| Revision | `ada0c23a36c4e8582805bb38fec3905903f18b41` (pinned for reproducibility) |
+| Required input | mono, 48 kHz |
+| Output dimension | 512 |
+| Device | CPU |
+
+- The model is loaded and cached by the `ModelManager` (`model_manager.py`).
+- Loading is lazy — `load()` is a no-op once the model is in memory.
+- `model.eval()` is set; inference runs inside `torch.no_grad()` (no gradients, lower memory).
+
+### Processing Steps
+
+1. Feature extraction
+<br>
+The `ClapProcessor` converts the waveform into the mel-spectrogram features expected by CLAP. Padding and truncation to the model's fixed input window are handled internally.
+
+2. Forward pass
+<br>
+`model.get_audio_features(...)` produces the projected audio embedding under `torch.no_grad()`.
+
+3. Conversion
+<br>
+The result is moved to CPU, converted to NumPy and squeezed to a flat vector of shape `(512,)`.
+
+- Files are processed **one at a time** (batch size 1). `compute_embeddings_batch()` is a convenience wrapper that loops and stacks — it does not batch on the GPU/CPU level.
+- Embeddings are computed for the whole corpus in a single run, so all datasets share one common embedding space.
+
+### Input & Output
+
+**Input**: `list[PreprocessedAudio]` — one entry per audio file, each holding a UUID and the preprocessed mono 48 kHz waveform as `np.ndarray`.
+
+**Output**: `list[EmbeddingData]` — one entry per audio file, each holding the UUID and a `np.ndarray` of shape `(512,)` (float32, ≈2 KB per file).
+
+### Implementation Details
+
+The embedding calculation is implemented in `app/processing/embeddings/`:
+
+- `model_manager.py` - Model/processor loading and in-memory caching
+- `embedding_service.py` - Single, batch and list-based embedding computation
+
 ## Nearest Neighbours
 
+Nearest neighbours describe, for every audio file, which other files sound most similar to it. The result is used by the Audio Explorer to navigate between related recordings.
+
+### Method
+
+- Implementation: `sklearn.neighbors.NearestNeighbors`
+- Metric: **cosine distance** (`1 - cosine similarity`)
+  - `0.0` = identical direction in embedding space
+  - `1.0` = maximally different
+- Cosine compares the direction of a vector.
+- Every audio file is compared against all the others.
+
+### Parameters
+
+| Parameter | Default | Description |
+| --- | --- | --- |
+| `k` | 30 | Number of neighbours stored per audio file |
+| `n_neighbors` | `min(k + 1, N)` | One extra neighbour is requested to compensate for the self-match |
+| `metric` | `cosine` | Distance measure in embedding space |
+
+- Every point is its own closest neighbour (distance `0.0`), so the first result is skipped and exactly `k` real neighbours remain.
+- Distances are rounded to 5 decimal places.
+- Cosine distance forces a brute-force search in scikit-learn, so runtime grows quadratically with the number of audio files. (needs to be changed, when the amount of audiofiles drastically increases)
+
+### Input & Output
+
+**Input**: `list[EmbeddingData]`, stacked into an `(N, 512)` matrix.
+
+**Output**: A dictionary mapping each UUID to its neighbours, ordered by ascending distance.
+
+```json
+{
+    "uuid1": {
+        "uuid7": 0.04123,
+        "uuid3": 0.09877,
+        "uuid9": 0.15402
+    }
+}
+```
+
+Stored in `data_overview.npz` as a JSON string in the `nearest_neighbors` field.
+
+### Implementation Details
+
+Implemented in `app/processing/nearest_neighbor_service.py`.
+
 ## UMAP
+
+UMAP (Uniform Manifold Approximation and Projection) reduces the 512-dimensional embeddings to 2D coordinates so the dataset can be displayed as an interactive scatter plot in the Audio Explorer.
+
+### Processing Steps
+
+1. Standardization
+<br>
+Some of the 512 dimensions have much larger values than others and would therefore count more when distances are calculated. `StandardScaler` rescales every dimension to the same value range, so all of them have equal weight.
+
+2. PCA pre-reduction
+<br>
+`PCA` shrinks the 512 dimensions down to 50. It keeps the dimensions that differ the most between the audio files and drops the rest, which are mostly noise. Less data also means UMAP runs much faster.
+
+3. UMAP projection
+<br>
+`umap.UMAP` projects the PCA output down to 2 dimensions, preserving the local neighbourhood structure of the embedding space.
+
+### Parameters
+
+| Parameter | Default | Description |
+| --- | --- | --- |
+| `n_components` (PCA) | `min(50, N-1, 512)` | Dimensions kept after PCA pre-reduction |
+| `n_components` (UMAP) | 2 | Target dimensionality of the projection |
+| `n_neighbors` | `min(15, N-1)` | Size of the local neighbourhood UMAP considers |
+| `min_dist` | 0.8 | Minimum distance between points in the projection |
+| `init` | `random` | Initialization strategy for the embedding layout |
+| `random_state` | 1 | Fixed seed |
+
+- A high `min_dist` spreads points out more evenly. This reduces visual overlap in the explorer at the cost of less tightly separated clusters.
+- A low `n_neighbors` emphasizes local structure over the global layout.
+- `random_state` makes runs reproducible but disables UMAP's parallelization, which increases runtime on large datasets. (needs to be reconsidered, when the amount of audiofiles drastically increases)
+- UMAP is fitted once over all datasets combined, so coordinates from different sources are directly comparable.
+
+### Input & Output
+
+**Input**: `list[EmbeddingData]`, stacked into an `(N, 512)` matrix.
+
+**Output**: A dictionary mapping each UUID to its coordinates.
+
+```json
+{
+    "uuid1": {
+        "umap_x": 4.8213,
+        "umap_y": -1.2049,
+        "umap_z": 0
+    }
+}
+```
+
+- The pipeline currently uses the 2D projection only; `umap_z` is always `0`.
+- A 3D variant (`compute_umap_3d`) exists in the service but is not called by the pipeline. (not very suitable for a webpage)
+
+### Implementation Details
+
+Implemented in `app/processing/umap_service.py`.
 
 ## Anomaly Detection
 
