@@ -137,10 +137,44 @@ The diagram below illustrates the complete processing pipeline, including the ex
 Further details about each processing stage are provided in the following sections.
 
 ## Datasets
+The displayed and used audio files are supplied from five different sources. In the beginning of the project our group did receive a data set directly from the researchers of the Oxford University, which was later replaced for a updated version. To enchance the avaiable data we used four additional external data sets...
+
+(Sharpen introduction and add number of audio files per source)
+
+VocalSound:
+Y. Gong, J. Yu and J. Glass, "Vocalsound: A Dataset for Improving Human Vocal Sounds Recognition," ICASSP 2022 - 2022 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP), Singapore, Singapore, 2022, pp. 151-155, doi: 10.1109/ICASSP43922.2022.9746828.
+keywords: {Training;Condition monitoring;Conferences;Buildings;Signal processing;Audio recording;Acoustics;vocal sounds;audio classification;corpus},
+
+Deeply Inc.
+@misc{deeply_nonverbal,
+  title={{Deeply Nonverbal Vocalization dataset}},
+  author={Deeply Inc.},
+  year={2021},
+  url={https://github.com/deeplyinc/Nonverbal-Vocalization-Dataset}
+}
+
+Nonspeech7k:
+Muhammad Mamunur Rashid, Guiqing Li *, & Chengrui Du. (2023). Nonspeech7k dataset [Data set]. In IET Signal Processing (Version 1). Zenodo. https://doi.org/10.5281/zenodo.6967442
+
+The Variably Intense Vocalizations of Affect and Emotion Corpus (VIVAE):
+Holz, N., Larrouy-Maestri, P., & Poeppel, D. (2020). The Variably Intense Vocalizations of Affect and Emotion Corpus (VIVAE) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.4066235
+
+## Data Formatting
+
+
 
 ## Metadata
+Metadata means data about data. It is structured information that describes, explains, or gives context to another piece of information or file, making it easier to find, use, and manage.
+Case specific, it was used to provide every audio file with additional information in a uniform way that is readable for both humans and machines. As following... (picture for visual stimulation)
+
+Pytaglib (libary python)
 
 ## Categories
+Adopted as in nvv_clips june - only added "unknown"
+
+
+## Labels
+Didnt label yourself - to be defined for external category yes - Other for external category no
 
 ## Audio Preprocessing
 ### Overview
