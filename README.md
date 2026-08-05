@@ -137,7 +137,8 @@ The diagram below illustrates the complete processing pipeline, including the ex
 Further details about each processing stage are provided in the following sections.
 
 ## Datasets
-The displayed and used audio files are supplied from five different sources. In the beginning of the project our group did receive a data set directly from the researchers of the Oxford University, which was later replaced for a updated version. To enchance the avaiable data we used four additional external data sets...
+Current data is assembled from five different audio file sources. The foundation is a set of data provided directly by the cooperatating researchers of Oxford University, being cruical in measuring the projects criteria and therefor searching complementing datasets.
+To enchance the amount of data the following open-source data sets got imported:
 
 (Sharpen introduction and add number of audio files per source)
 
@@ -165,16 +166,24 @@ Holz, N., Larrouy-Maestri, P., & Poeppel, D. (2020). The Variably Intense Vocali
 
 ## Metadata
 Metadata means data about data. It is structured information that describes, explains, or gives context to another piece of information or file, making it easier to find, use, and manage.
-Case specific, it was used to provide every audio file with additional information in a uniform way that is readable for both humans and machines. As following... (picture for visual stimulation)
+In this case specifically, it was used to provide every audio file with additional information (readable for both humans and machines). The following image displays an example: <br>
 
-Pytaglib (libary python)
+<img width="469" height="247" alt="image" src="https://github.com/user-attachments/assets/13ddb813-73f0-4b3c-84cd-c18ff9731d49" />
+
+Mentioned process was heavily supported by the python-libary Pytaglib ([libary python)](https://pypi.org/project/pytaglib/)).
+Pytaglib is a very thin wrapper around the fast and rock-solid TagLib C++ library.
 
 ## Categories
 Adopted as in nvv_clips june - only added "unknown"
 
+[category_list.json](https://github.com/user-attachments/files/30744010/category_list.json)
+
 
 ## Labels
 Didnt label yourself - to be defined for external category yes - Other for external category no
+
+[new_ontology.json](https://github.com/user-attachments/files/30744195/new_ontology.json)
+
 
 ## Audio Preprocessing
 ### Overview
