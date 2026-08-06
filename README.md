@@ -154,8 +154,8 @@ The audio files used have been enhanced with additional information (metadata) t
 The following image shows an example (source: researchers at Oxford University): <br>
 <br>
 <img width="469" height="247" alt="image" src="https://github.com/user-attachments/assets/13ddb813-73f0-4b3c-84cd-c18ff9731d49" />
-<br>
-This process was made possible with support/import from the Python library [pytaglib](https://pypi.org/project/pytaglib/).
+
+<br>This process was made possible with support/import from the Python library [pytaglib](https://pypi.org/project/pytaglib/).
 
 ## Categories
 Categories group together audio files that share a strong resemblance ("alikeness"). This kind of classification can be noticed in the metadata as well as in the frontend-visualisation.
