@@ -137,7 +137,8 @@ The diagram below illustrates the complete processing pipeline, including the ex
 Further details about each processing stage are provided in the following sections.
 
 ## Datasets
-The current dataset is assembled from multiple sources. Its foundation is a set of data provided directly by our cooperating researchers at Oxford University. This dataset was crucial in defining the project's evaluation criteria and, therefore, guided the search for complementary datasets.
+The current dataset is assembled from multiple sources. Its foundation is a set of data provided directly by our cooperating researchers at Oxford University. This dataset was crucial in defining the project's evaluation criteria and, therefore, guided the search for complementary datasets.<br>
+Other open-source datasets:
 [Deeply Inc.](https://www.openslr.org/99/)
 [Nonspeech7k](https://doi.org/10.5281/zenodo.6967442)
 [Vocalsound](https://doi.org/10.1109/ICASSP43922.2022.9746828)
