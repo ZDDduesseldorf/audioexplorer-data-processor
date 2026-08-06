@@ -167,7 +167,7 @@ For a complete overview, check:
 ## Labels
 Labels are hierarchically subordinate to categories, providing even more information.
 
-Note: "To be defined" is used when a audio file originates from an external dataset and can be matched to the existing categories (set by the dataset of Oxford University). "Other" is used in case a audio file doesn't fit any existing category, as a result any specifying information will be stored in the label-tag.
+Note: "To be defined" is used when a audio file originates from an external dataset and can be matched to the existing categories (set by the dataset of Oxford University). "Other" is used in case a audio file doesn't fit any existing category, as a result any specifying information will be stored in the label-tag (no matter the origin).
 
 For a complete label-overview, check: [new_ontology.json](https://github.com/user-attachments/files/30744195/new_ontology.json)
 
