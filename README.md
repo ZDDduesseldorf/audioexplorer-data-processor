@@ -137,52 +137,38 @@ The diagram below illustrates the complete processing pipeline, including the ex
 Further details about each processing stage are provided in the following sections.
 
 ## Datasets
-Current data is assembled from five different audio file sources. The foundation is a set of data provided directly by the cooperatating researchers of Oxford University, being cruical in measuring the projects criteria and therefor searching complementing datasets.
-To enchance the amount of data the following open-source data sets got imported:
+The current dataset is assembled from multiple sources. Its foundation is a set of data provided directly by our cooperating researchers at Oxford University. This dataset was crucial in defining the project's evaluation criteria and, therefore, guided the search for complementary datasets.
+[Deeply Inc.](https://www.openslr.org/99/)
+[Nonspeech7k](https://doi.org/10.5281/zenodo.6967442)
+[Vocalsound](https://doi.org/10.1109/ICASSP43922.2022.9746828)
+[VIVAE](https://doi.org/10.5281/zenodo.4066235)
 
-(Sharpen introduction and add number of audio files per source)
 
-VocalSound:
-Y. Gong, J. Yu and J. Glass, "Vocalsound: A Dataset for Improving Human Vocal Sounds Recognition," ICASSP 2022 - 2022 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP), Singapore, Singapore, 2022, pp. 151-155, doi: 10.1109/ICASSP43922.2022.9746828.
-keywords: {Training;Condition monitoring;Conferences;Buildings;Signal processing;Audio recording;Acoustics;vocal sounds;audio classification;corpus},
-
-Deeply Inc.
-@misc{deeply_nonverbal,
-  title={{Deeply Nonverbal Vocalization dataset}},
-  author={Deeply Inc.},
-  year={2021},
-  url={https://github.com/deeplyinc/Nonverbal-Vocalization-Dataset}
-}
-
-Nonspeech7k:
-Muhammad Mamunur Rashid, Guiqing Li *, & Chengrui Du. (2023). Nonspeech7k dataset [Data set]. In IET Signal Processing (Version 1). Zenodo. https://doi.org/10.5281/zenodo.6967442
-
-The Variably Intense Vocalizations of Affect and Emotion Corpus (VIVAE):
-Holz, N., Larrouy-Maestri, P., & Poeppel, D. (2020). The Variably Intense Vocalizations of Affect and Emotion Corpus (VIVAE) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.4066235
 
 ## Data Formatting
-
-
+All audio files are stored in WAV format. On import, each file is renamed to a unique identifier (UUID), ensuring consistent, collision-free filenames across all combined data sources. A JSON index is maintained alongside the audio files to track metadata and category/label assignments.
 
 ## Metadata
-Metadata means data about data. It is structured information that describes, explains, or gives context to another piece of information or file, making it easier to find, use, and manage.
-In this case specifically, it was used to provide every audio file with additional information (readable for both humans and machines). The following image displays an example: <br>
+The audio files used have been enhanced with additional information (metadata) that is readable by both humans and machines. The number of descriptive tags can vary depending on the source of the audio file.
+The following image shows an example (source: researchers at Oxford University): <br>
 
 <img width="469" height="247" alt="image" src="https://github.com/user-attachments/assets/13ddb813-73f0-4b3c-84cd-c18ff9731d49" />
 
-Mentioned process was heavily supported by the python-libary Pytaglib ([libary python)](https://pypi.org/project/pytaglib/)).
-Pytaglib is a very thin wrapper around the fast and rock-solid TagLib C++ library.
+This process was made possible with support/import from the Python library [pytaglib](https://pypi.org/project/pytaglib/).
 
 ## Categories
-Adopted as in nvv_clips june - only added "unknown"
+Categories group together audio files that share a strong resemblance ("alikeness"). This kind of classification can be noticed in the metadata as well as in the frontend-visualisation.
 
+For a complete overview, check:
 [category_list.json](https://github.com/user-attachments/files/30744010/category_list.json)
 
 
 ## Labels
-Didnt label yourself - to be defined for external category yes - Other for external category no
+Labels are hierarchically subordinate to categories, providing even more information.
 
-[new_ontology.json](https://github.com/user-attachments/files/30744195/new_ontology.json)
+Note: "To be defined" is used when a audio file originates from an external dataset and can be matched to the existing categories (set by the dataset of Oxford University). "Other" is used in case a audio file doesn't fit any existing category, as a result any specifying information will be stored in the label-tag.
+
+For a complete label-overview, check: [new_ontology.json](https://github.com/user-attachments/files/30744195/new_ontology.json)
 
 
 ## Audio Preprocessing
