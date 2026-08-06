@@ -152,9 +152,9 @@ All audio files are stored in WAV format. On import, each file is renamed to a u
 ## Metadata
 The audio files used have been enhanced with additional information (metadata) that is readable by both humans and machines. The number of descriptive tags can vary depending on the source of the audio file.
 The following image shows an example (source: researchers at Oxford University): <br>
-
+<br>
 <img width="469" height="247" alt="image" src="https://github.com/user-attachments/assets/13ddb813-73f0-4b3c-84cd-c18ff9731d49" />
-
+<br>
 This process was made possible with support/import from the Python library [pytaglib](https://pypi.org/project/pytaglib/).
 
 ## Categories
