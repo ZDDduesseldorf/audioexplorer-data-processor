@@ -138,11 +138,11 @@ Further details about each processing stage are provided in the following sectio
 
 ## Datasets
 The current dataset is assembled from multiple sources. Its foundation is a set of data provided directly by our cooperating researchers at Oxford University. This dataset was crucial in defining the project's evaluation criteria and, therefore, guided the search for complementary datasets.<br>
-Other open-source datasets:
-[Deeply Inc.](https://www.openslr.org/99/)
-[Nonspeech7k](https://doi.org/10.5281/zenodo.6967442)
-[Vocalsound](https://doi.org/10.1109/ICASSP43922.2022.9746828)
-[VIVAE](https://doi.org/10.5281/zenodo.4066235)
+Other open-source datasets:<br>
+[Deeply Inc.](https://www.openslr.org/99/)<br>
+[Nonspeech7k](https://doi.org/10.5281/zenodo.6967442)<br>
+[Vocalsound](https://doi.org/10.1109/ICASSP43922.2022.9746828)<br>
+[VIVAE](https://doi.org/10.5281/zenodo.4066235)<br>
 
 
 
