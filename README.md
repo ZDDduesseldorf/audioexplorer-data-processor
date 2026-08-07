@@ -150,15 +150,25 @@ The current dataset is assembled from multiple sources. Its foundation is a set 
 All audio files are stored in WAV format. On import, each file is renamed to a unique identifier (UUID), ensuring consistent, collision-free filenames across all combined data sources. A JSON index is maintained alongside the audio files to track metadata and category/label assignments.
 
 ## Metadata
-The audio files used have been enhanced with additional information (metadata) that is readable by both humans and machines. The number of descriptive tags can vary depending on the source of the audio file.
-The following image shows an example (source: researchers at Oxford University): <br>
+The audio files used have been enhanced with additional information (metadata) that is readable by both humans and machines. The number of descriptive tags can vary depending on the source of the audio file, but at a minimum require the following:
+- uuid
+- filename
+- label
+- category
+- source
+
+The displayed image shows an example (source: researchers at Oxford University): <br>
 <br>
 <img width="469" height="247" alt="image" src="https://github.com/user-attachments/assets/13ddb813-73f0-4b3c-84cd-c18ff9731d49" />
 
-<br>This process was made possible with support/import from the Python library [pytaglib](https://pypi.org/project/pytaglib/).
+This process was made possible with support/import from the Python library [pytaglib](https://pypi.org/project/pytaglib/).
 
 ## Categories
 Categories group together audio files that share a strong resemblance ("alikeness"). This kind of classification can be noticed in the metadata as well as in the frontend-visualisation.
+
+Note "Other":<br> This value is used in case a audio file doesn't fit any existing category, as a result any specifying information will be stored in the label-tag (no matter the origin/source).
+
+Note "Unknown":<br> The value "Unknown" represents a non-final variable. Audio files assigned to this category are intended for interactive measurement by frontend users.
 
 For a complete overview, check:
 [category_list.json](https://github.com/user-attachments/files/30744010/category_list.json)
@@ -167,7 +177,7 @@ For a complete overview, check:
 ## Labels
 Labels are hierarchically subordinate to categories, providing even more information.
 
-Note: "To be defined" is used when a audio file originates from an external dataset and can be matched to the existing categories (set by the dataset of Oxford University). "Other" is used in case a audio file doesn't fit any existing category, as a result any specifying information will be stored in the label-tag (no matter the origin).
+Note "To be defined":<br> This label is used when a audio file originates from an external dataset and can be matched to the existing categories (set by the dataset of Oxford University), but is missing any further details.
 
 For a complete label-overview, check: [new_ontology.json](https://github.com/user-attachments/files/30744195/new_ontology.json)
 
