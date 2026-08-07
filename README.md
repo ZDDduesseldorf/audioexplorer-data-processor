@@ -183,36 +183,41 @@ For a complete label-overview, check: [new_ontology.json](https://github.com/use
 
 
 ## Audio Preprocessing
+
 ### Overview
-Audio preprocessing is the first step in the processing pipeline. It prepares raw audio files for further analysis by standardizing sample rates, filtering invalid audio files, reducing noise, and ensuring consistent audio quality. 
+
+Audio preprocessing is the first step in the processing pipeline. It prepares raw audio files for further analysis by standardizing sample rates, filtering invalid audio files, reducing noise, and ensuring consistent audio quality.
 
 ### Processing Steps
+
 The preprocessing pipeline applies the following transformations to each audio file in sequence:
 
-1. Mono Conversion & Resampling
-<br>
+#### 1. Mono Conversion & Resampling
+
 Audio files are converted to mono and resampled to 48,000 Hz using Librosa resampling. This ensures compatibility with the CLAP embedding model that requires mono, 48 kHz input.
 
-2. Length Filtering
-<br>
+#### 2. Length Filtering
+
 Filters out audio files that do not meet duration requirements:
-<br>
-Minimum duration: 0.1 seconds <br>
-Maximum duration: 30 seconds <br>
+
+- **Minimum duration:** 0.1 seconds
+- **Maximum duration:** 30 seconds
+
 Audio files outside this range are excluded from further processing and logged as rejected samples.
 
-3. Silence Filtering
-<br>
+#### 3. Silence Filtering
+
 Removes audio files that contain insufficient acoustic content by analyzing the Root Mean Square (RMS) energy. Files with RMS energy below the threshold of 0.005 are filtered out, as they typically contain only silence or very low-level noise.
 
-4. Noise Reduction
-<br>
+#### 4. Noise Reduction
+
 Applies adaptive noise reduction to suppress background noise. A noise floor is estimated from quiet parts of the audio, and samples below this threshold are soft-suppressed based on the configured strength.
 
 ### Configuration
 
 **Model Dependencies:**
-The preprocessing parameters are optimized for the CLAP (Contrastive Language-Audio Pre-training) embedding model from Hugging Face (laion/larger_clap_general). If using a different embedding model, adjust these parameters accordingly.
+
+The preprocessing parameters are optimized for the CLAP (Contrastive Language-Audio Pre-training) embedding model from Hugging Face (`laion/larger_clap_general`). If using a different embedding model, adjust these parameters accordingly.
 
 Default preprocessing parameters can be modified via environment variables or by editing `audio_config.py`:
 
@@ -230,20 +235,25 @@ Default preprocessing parameters can be modified via environment variables or by
 
 ### Input & Output
 
-**Input**: Raw audio files in various formats (WAV, MP3, FLAC, etc.) with different sample rates, typically sourced from `raw_audios/` directory with accompanying `metadata.json`.
+**Input**
 
-**Output**: Preprocessed mono audio files saved to `processed_audios/` directory in WAV format at 48 kHz. Only audio files that pass all filtering criteria are output.
+Raw audio files in various formats (WAV, MP3, FLAC, etc.) with different sample rates, typically sourced from `raw_audios/` directory with accompanying `metadata.json`.
 
-### Impementation Details
+**Output**
+
+Preprocessed mono audio files saved to `processed_audios/` directory in WAV format at 48 kHz. Only audio files that pass all filtering criteria are output.
+
+### Implementation Details
+
 The audio preprocessing is implemented in `app/processing/audio/`:
 
-- `audio_config.py` - Configuration parameters
-- `resampler.py` - Sample rate conversion using Librosa
-- `filter.py` - Duration, silence, and noise reduction filters
-- `loader.py` - Audio file loading
-- `saver.py` - Preprocessed audio file saving
+- `audio_config.py` — Configuration parameters
+- `resampler.py` — Sample rate conversion using Librosa
+- `filter.py` — Duration, silence, and noise reduction filters
+- `loader.py` — Audio file loading
+- `saver.py` — Preprocessed audio file saving
 
-## Embedding calculation
+## Embedding Calculation
 
 Embeddings turn each preprocessed waveform into a fixed-length numeric vector. All downstream steps (nearest neighbours, UMAP, anomaly detection) operate on these vectors only — never on the raw audio.
 
@@ -258,39 +268,47 @@ Embeddings turn each preprocessed waveform into a fixed-length numeric vector. A
 | Output dimension | 512 |
 | Device | CPU |
 
-- The model is loaded and cached by the `ModelManager` (`model_manager.py`).
-- Loading is lazy — `load()` is a no-op once the model is in memory.
-- `model.eval()` is set; inference runs inside `torch.no_grad()` (no gradients, lower memory).
+**Implementation Details:**
+
+- The model is loaded and cached by the `ModelManager` (`model_manager.py`)
+- Loading is lazy — `load()` is a no-op once the model is in memory
+- `model.eval()` is set; inference runs inside `torch.no_grad()` (no gradients, lower memory)
 
 ### Processing Steps
 
-1. Feature extraction
-<br>
+#### 1. Feature Extraction
+
 The `ClapProcessor` converts the waveform into the mel-spectrogram features expected by CLAP. Padding and truncation to the model's fixed input window are handled internally.
 
-2. Forward pass
-<br>
+#### 2. Forward Pass
+
 `model.get_audio_features(...)` produces the projected audio embedding under `torch.no_grad()`.
 
-3. Conversion
-<br>
+#### 3. Conversion
+
 The result is moved to CPU, converted to NumPy and squeezed to a flat vector of shape `(512,)`.
 
-- Files are processed **one at a time** (batch size 1). `compute_embeddings_batch()` is a convenience wrapper that loops and stacks — it does not batch on the GPU/CPU level.
-- Embeddings are computed for the whole corpus in a single run, so all datasets share one common embedding space.
+**Processing Characteristics:**
+
+- Files are processed **one at a time** (batch size 1). `compute_embeddings_batch()` is a convenience wrapper that loops and stacks — it does not batch on the GPU/CPU level
+- Embeddings are computed for the whole corpus in a single run, so all datasets share one common embedding space
 
 ### Input & Output
 
-**Input**: `list[PreprocessedAudio]` — one entry per audio file, each holding a UUID and the preprocessed mono 48 kHz waveform as `np.ndarray`.
+**Input**
 
-**Output**: `list[EmbeddingData]` — one entry per audio file, each holding the UUID and a `np.ndarray` of shape `(512,)` (float32, ≈2 KB per file).
+`list[PreprocessedAudio]` — one entry per audio file, each holding a UUID and the preprocessed mono 48 kHz waveform as `np.ndarray`.
+
+**Output**
+
+`list[EmbeddingData]` — one entry per audio file, each holding the UUID and a `np.ndarray` of shape `(512,)` (float32, ≈2 KB per file).
 
 ### Implementation Details
 
 The embedding calculation is implemented in `app/processing/embeddings/`:
 
-- `model_manager.py` - Model/processor loading and in-memory caching
-- `embedding_service.py` - Single, batch and list-based embedding computation
+- `model_manager.py` — Model/processor loading and in-memory caching
+- `embedding_service.py` — Single, batch and list-based embedding computation
 
 ## Nearest Neighbours
 
